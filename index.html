@@ -1,447 +1,3643 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#050504" />
-  <meta name="description" content="HUYDJI MEDIA — portfolio hình ảnh, cinematic media, bất động sản, sự kiện, flycam và trải nghiệm 360°." />
-  <meta name="robots" content="index,follow" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050504">
+  <meta name="description" content="HUYDJI MEDIA — cinematic visual portfolio, bất động sản, sự kiện, flycam và trải nghiệm 360°.">
   <title>HUYDJI MEDIA | Cinematic Visual Portfolio</title>
 
-  <!-- Portfolio / contact only. No payment, checkout, ecommerce, login, form collection or tracking. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://cdn.pannellum.org/2.5/pannellum.css" />
+  <link rel="stylesheet" href="https://cdn.pannellum.org/2.5/pannellum.css">
   <script src="https://cdn.pannellum.org/2.5/pannellum.js"></script>
 
   <style>
     :root{
-      --bg:#050504; --bg2:#0a0907; --ink:#f7f4ed; --muted:#9a958b;
-      --gold:#c99f54; --gold2:#f0d49a; --line:rgba(240,212,154,.18);
-      --panel:rgba(255,255,255,.035); --ease:cubic-bezier(.2,.78,.18,1);
-      --max:1480px; --mx:50vw; --my:50vh;
+      --bg:#050504;
+      --bg2:#0b0907;
+      --ink:#f6f3eb;
+      --muted:#979187;
+      --gold:#c99f54;
+      --gold2:#f0d49a;
+      --line:rgba(240,212,154,.16);
+      --panel:rgba(255,255,255,.035);
+      --ease:cubic-bezier(.2,.78,.18,1);
+      --max:1460px;
+      --mx:50vw;
+      --my:50vh;
     }
+
     *{box-sizing:border-box}
     html{scroll-behavior:smooth;background:var(--bg)}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,Arial,sans-serif;overflow-x:hidden}
-    body.is-loading{overflow:hidden}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:Manrope,Arial,sans-serif;
+      overflow-x:hidden
+    }
+    body.loading{overflow:hidden}
     a{color:inherit;text-decoration:none}
     button{font:inherit;color:inherit}
     img,video{display:block;width:100%}
-    ::selection{background:var(--gold2);color:#080705}
+    ::selection{background:var(--gold2);color:#090704}
 
-    /* atmospheric layers */
-    #ambient{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.42}
-    .noise{position:fixed;inset:0;z-index:9996;pointer-events:none;opacity:.035;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.75'/%3E%3C/svg%3E")}
-    .mouse-glow{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(480px circle at var(--mx) var(--my),rgba(218,172,91,.075),transparent 62%)}
-    #progress{position:fixed;z-index:10002;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#76511e,var(--gold2));box-shadow:0 0 28px rgba(240,212,154,.38)}
+    .shell{
+      width:min(var(--max),calc(100% - 84px));
+      margin:0 auto;
+      position:relative;
+      z-index:3
+    }
 
-    /* custom cursor */
-    .cursor-dot,.cursor-ring{position:fixed;left:0;top:0;z-index:10003;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .25s ease}
-    .cursor-dot{width:5px;height:5px;background:var(--gold2);margin:-2.5px 0 0 -2.5px}
-    .cursor-ring{width:38px;height:38px;border:1px solid rgba(240,212,154,.5);margin:-19px 0 0 -19px;transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background .3s ease,border-color .3s ease}
-    body.cursor-on .cursor-dot,body.cursor-on .cursor-ring{opacity:1}
-    body.cursor-hover .cursor-ring{width:62px;height:62px;margin:-31px 0 0 -31px;background:rgba(240,212,154,.06);border-color:rgba(240,212,154,.8)}
-
-    /* loader */
-    .loader{position:fixed;inset:0;z-index:11000;background:#050504;display:grid;place-items:center;transition:opacity .9s var(--ease),visibility .9s var(--ease)}
-    .loader.off{opacity:0;visibility:hidden}
-    .loader-inner{text-align:center}
-    .loader-mark{font-family:"Montserrat",sans-serif;font-size:clamp(46px,7vw,104px);line-height:1;letter-spacing:.05em}
-    .loader-mark em{font-style:normal;color:var(--gold2)}
-    .loader-sub{margin-top:13px;color:#8d836f;font-size:9px;letter-spacing:.48em;text-transform:uppercase}
-    .loader-line{width:190px;height:1px;background:#221c13;margin:28px auto 0;overflow:hidden}
-    .loader-line i{display:block;height:100%;width:44%;background:linear-gradient(90deg,transparent,var(--gold2),transparent);animation:loadline 1.15s infinite}
-    @keyframes loadline{from{transform:translateX(-130%)}to{transform:translateX(290%)}}
-
-    .shell{position:relative;z-index:3;width:min(var(--max),calc(100% - 84px));margin:0 auto}
-    .eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold2);font-weight:600}
     .gold{color:var(--gold2)}
-    .serif{font-family:"Montserrat",sans-serif}
 
-    /* header */
-    header{position:fixed;z-index:9500;left:0;right:0;top:0;height:84px;border-bottom:1px solid rgba(255,255,255,.055);background:linear-gradient(180deg,rgba(5,5,4,.92),rgba(5,5,4,.58));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);transition:transform .5s var(--ease),background .4s ease}
+    .eyebrow{
+      font-size:9px;
+      letter-spacing:.5em;
+      text-transform:uppercase;
+      color:#e7c57e;
+      font-weight:700;
+      animation:eyebrowPulse 4.8s ease-in-out infinite
+    }
+
+    .section{
+      padding:145px 0;
+      position:relative
+    }
+
+    #progress{
+      position:fixed;
+      z-index:10020;
+      left:0;
+      top:0;
+      width:0;
+      height:2px;
+      background:linear-gradient(90deg,#805820,var(--gold2));
+      box-shadow:0 0 26px rgba(240,212,154,.35)
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      z-index:9990;
+      pointer-events:none;
+      opacity:.03;
+      mix-blend-mode:soft-light;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+    }
+
+    .mouse-glow{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      background:
+        radial-gradient(
+          480px circle at var(--mx) var(--my),
+          rgba(220,175,92,.075),
+          transparent 62%
+        )
+    }
+
+    #ambient{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      opacity:.45
+    }
+
+    .cursor-dot,
+    .cursor-ring{
+      position:fixed;
+      left:0;
+      top:0;
+      z-index:10030;
+      pointer-events:none;
+      border-radius:50%;
+      opacity:0;
+      transition:opacity .2s ease
+    }
+
+    .cursor-dot{
+      width:5px;
+      height:5px;
+      margin:-2.5px 0 0 -2.5px;
+      background:var(--gold2)
+    }
+
+    .cursor-ring{
+      width:38px;
+      height:38px;
+      margin:-19px 0 0 -19px;
+      border:1px solid rgba(240,212,154,.52);
+      transition:
+        width .3s var(--ease),
+        height .3s var(--ease),
+        margin .3s var(--ease),
+        background .3s ease
+    }
+
+    body.cursor-on .cursor-dot,
+    body.cursor-on .cursor-ring{
+      opacity:1
+    }
+
+    body.cursor-hover .cursor-ring{
+      width:62px;
+      height:62px;
+      margin:-31px 0 0 -31px;
+      background:rgba(240,212,154,.055)
+    }
+
+    .loader{
+      position:fixed;
+      inset:0;
+      z-index:11000;
+      background:#050504;
+      display:grid;
+      place-items:center;
+      transition:
+        opacity .8s var(--ease),
+        visibility .8s var(--ease)
+    }
+
+    .loader.off{
+      opacity:0;
+      visibility:hidden
+    }
+
+    .loader-box{text-align:center}
+
+    .loader-logo{
+      font-family:Montserrat,sans-serif;
+      font-weight:700;
+      font-size:clamp(42px,7vw,100px);
+      letter-spacing:.06em
+    }
+
+    .loader-logo span{color:var(--gold2)}
+
+    .loader-sub{
+      margin-top:10px;
+      color:#827766;
+      font-size:8px;
+      letter-spacing:.5em;
+      text-transform:uppercase
+    }
+
+    .loader-line{
+      width:190px;
+      height:1px;
+      background:#251e14;
+      margin:26px auto 0;
+      overflow:hidden
+    }
+
+    .loader-line i{
+      display:block;
+      width:40%;
+      height:100%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--gold2),
+          transparent
+        );
+      animation:loaderLine 1.1s infinite
+    }
+
+    header{
+      position:fixed;
+      z-index:9500;
+      top:0;
+      left:0;
+      right:0;
+      height:82px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(5,5,4,.94),
+          rgba(5,5,4,.58)
+        );
+      border-bottom:1px solid rgba(255,255,255,.055);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      transition:
+        transform .45s var(--ease),
+        background .35s ease
+    }
+
     header.hide{transform:translateY(-100%)}
-    header.scrolled{background:rgba(5,5,4,.84)}
-    .nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:34px}
-    .brand{display:flex;flex-direction:column;gap:2px}
-    .brand strong{font-size:21px;letter-spacing:.24em;font-weight:700}.brand strong span{color:var(--gold)}
-    .brand small{font-size:7px;letter-spacing:.42em;color:#716b60;text-transform:uppercase}
-    nav{display:flex;align-items:center;gap:30px}
-    nav a{font-size:9px;letter-spacing:.19em;text-transform:uppercase;color:#aaa69e;position:relative;padding:31px 0}
-    nav a:after{content:"";position:absolute;left:50%;bottom:22px;width:0;height:1px;background:var(--gold2);transition:.35s var(--ease);transform:translateX(-50%)}
-    nav a:hover{color:white}nav a:hover:after{width:100%}
-    .menu-btn{display:none;border:0;background:transparent;width:44px;height:44px;cursor:pointer}
-    .menu-btn span,.menu-btn:before,.menu-btn:after{content:"";display:block;width:22px;height:1px;background:white;margin:5px auto;transition:.3s}
-    .mobile-panel{position:fixed;z-index:9400;inset:0;background:rgba(5,5,4,.98);display:grid;place-items:center;opacity:0;visibility:hidden;transition:.45s var(--ease)}
-    .mobile-panel.open{opacity:1;visibility:visible}
-    .mobile-panel nav{display:flex;flex-direction:column;gap:14px}.mobile-panel nav a{font-family:"Montserrat",sans-serif;font-size:38px;text-transform:none;letter-spacing:-.02em;padding:8px;color:#eee9df}
+    header.scrolled{background:rgba(5,5,4,.86)}
 
-    /* hero */
-    .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:#050504}
-    .hero-media,.hero-fallback{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;will-change:transform}
-    .hero-media{opacity:.43;filter:saturate(.74) contrast(1.12) brightness(.78);animation:heroBreath 16s ease-in-out infinite alternate}
-    @keyframes heroBreath{from{transform:scale(1.01)}to{transform:scale(1.07)}}
-    .hero-fallback{background:radial-gradient(circle at 66% 34%,rgba(215,170,91,.15),transparent 23%),radial-gradient(ellipse at 50% 80%,rgba(214,177,106,.11),transparent 34%),linear-gradient(125deg,#15120c,#060605 60%)}
-    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,4,.22),rgba(5,5,4,.12) 40%,rgba(5,5,4,.96) 100%),linear-gradient(90deg,rgba(5,5,4,.48),transparent 50%,rgba(5,5,4,.22))}
-    .hero-orbit{position:absolute;z-index:1;width:min(72vw,1040px);aspect-ratio:1;border:1px solid rgba(240,212,154,.085);border-radius:50%;left:51%;top:50%;transform:translate(-50%,-45%);box-shadow:0 0 140px rgba(214,177,106,.045),inset 0 0 190px rgba(214,177,106,.025)}
-    .hero-orbit:before,.hero-orbit:after{content:"";position:absolute;border-radius:50%;inset:7%;border:1px solid rgba(255,255,255,.025)}
-    .hero-orbit:after{inset:17%;border-color:rgba(240,212,154,.05)}
-    .light-sweep{position:absolute;z-index:1;top:-20%;left:-35%;width:32%;height:150%;background:linear-gradient(90deg,transparent,rgba(240,212,154,.05),transparent);transform:rotate(16deg);animation:sweep 11s ease-in-out infinite}
-    @keyframes sweep{0%,20%{left:-40%;opacity:0}45%{opacity:1}75%,100%{left:120%;opacity:0}}
-    .hero-content{position:relative;z-index:3;width:100%;padding:180px 0 58px}
-    .hero-grid{display:grid;grid-template-columns:1.28fr .72fr;gap:66px;align-items:end}
-    .hero h1{margin:22px 0 34px;font-family:"Montserrat",sans-serif;font-size:clamp(68px,9.4vw,152px);font-weight:600;line-height:.92;letter-spacing:-.055em;max-width:100%}
-    .hero h1 .line{display:block;overflow:hidden;padding-right:.08em;padding-bottom:.04em}.hero h1 .line + .line{margin-top:clamp(20px,1.8vw,34px)}.hero h1 .line i{display:block;font-style:normal;transform:translateY(110%);animation:titleUp 1.05s var(--ease) forwards}.hero h1 .line:nth-child(2) i{animation-delay:.13s}
-    @keyframes titleUp{to{transform:none}}
-    .hero-copy{max-width:610px;color:#aaa59b;font-size:13px;line-height:1.95}
-    .hero-side p{font-family:"Montserrat",sans-serif;font-size:clamp(27px,3.2vw,50px);line-height:1.15;margin:0 0 30px;color:#dfd9cd}
-    .cta-row{display:flex;gap:11px;flex-wrap:wrap}
-    .btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:14px;border:1px solid rgba(214,177,106,.34);padding:16px 23px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;transition:.4s var(--ease);background:rgba(255,255,255,.01)}
-    .btn:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,rgba(240,212,154,.14),transparent 60%);transform:translateX(-105%);transition:.55s var(--ease)}
-    .btn:hover:before{transform:none}.btn:hover{transform:translateY(-3px);border-color:rgba(240,212,154,.75);box-shadow:0 18px 48px rgba(0,0,0,.28)}
-    .btn.primary{background:linear-gradient(110deg,#93672c,#e0b66b);color:#0b0906;border-color:transparent;font-weight:700}
-    .hero-tags{margin-top:70px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid rgba(255,255,255,.07);background:rgba(5,5,4,.34);backdrop-filter:blur(12px)}
-    .hero-tag{padding:25px 28px;border-right:1px solid rgba(255,255,255,.07)}.hero-tag:last-child{border:0}
-    .hero-tag b{display:block;color:var(--gold2);font-family:"Montserrat",sans-serif;font-size:20px;font-weight:500}.hero-tag small{display:block;margin-top:8px;color:#77726a;font-size:7px;letter-spacing:.23em;text-transform:uppercase}
-    .scroll-cue{position:absolute;z-index:5;right:40px;bottom:38px;display:flex;align-items:center;gap:12px;color:#777168;font-size:7px;letter-spacing:.22em;text-transform:uppercase;transform:rotate(90deg);transform-origin:right center}.scroll-cue i{display:block;width:42px;height:1px;background:linear-gradient(90deg,var(--gold2),transparent)}
+    .nav{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:30px
+    }
 
-    /* marquee */
-    .marquee{position:relative;z-index:3;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);overflow:hidden;background:#070706;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
-    .marquee-track{display:flex;width:max-content;will-change:transform;animation:marqueeLoop 20s linear infinite;padding:19px 0;transform:translate3d(0,0,0)}
-    .marquee-group{flex:none;display:flex;align-items:center;padding-right:46px}
-    .marquee span{font-family:"Montserrat",sans-serif;color:#827b70;font-size:17px;letter-spacing:.14em;white-space:nowrap}.marquee b{color:var(--gold2);font-weight:500}
-    @keyframes marqueeLoop{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:3px
+    }
 
-    section{position:relative;z-index:3;padding:150px 0;border-top:1px solid rgba(255,255,255,.045)}
-    .section-head{display:grid;grid-template-columns:1fr 1fr;gap:88px;align-items:end;margin-bottom:76px}
-    .section-title{font-family:"Montserrat",sans-serif;font-size:clamp(46px,5.4vw,88px);line-height:1.08;letter-spacing:-.035em;margin:14px 0 0;font-weight:600}
-    .section-desc{max-width:600px;justify-self:end;color:#959087;line-height:1.95;font-size:12px}
+    .brand strong{
+      font-family:Montserrat,sans-serif;
+      font-size:21px;
+      letter-spacing:.24em;
+      font-weight:700
+    }
 
-    /* reveal systems */
-    .reveal{opacity:0;transform:translateY(36px);transition:opacity .95s var(--ease),transform .95s var(--ease)}
-    .reveal.in{opacity:1;transform:none}
-    .clip-reveal{clip-path:inset(0 0 100% 0);transform:scale(1.04);transition:clip-path 1.15s var(--ease),transform 1.35s var(--ease)}
-    .clip-reveal.in{clip-path:inset(0);transform:none}
+    .brand strong span{
+      background:
+        linear-gradient(
+          90deg,
+          #9d6e2e,
+          #f1d79f,
+          #b87e35,
+          #f7e2b4
+        );
+      background-size:240% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation:goldFlow 7s ease-in-out infinite
+    }
+
+    .brand small{
+      font-size:7px;
+      letter-spacing:.42em;
+      color:#6f695f;
+      text-transform:uppercase
+    }
+
+    nav{
+      display:flex;
+      gap:30px;
+      align-items:center
+    }
+
+    nav a{
+      font-size:9px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#aaa69e;
+      position:relative;
+      padding:30px 0
+    }
+
+    nav a:after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:21px;
+      width:0;
+      height:1px;
+      background:var(--gold2);
+      transform:translateX(-50%);
+      transition:.35s var(--ease)
+    }
+
+    nav a:hover{color:#fff}
+    nav a:hover:after{width:100%}
+
+    .menu-btn{
+      display:none;
+      width:46px;
+      height:46px;
+      background:transparent;
+      border:0;
+      cursor:pointer
+    }
+
+    .menu-btn span,
+    .menu-btn:before,
+    .menu-btn:after{
+      content:"";
+      display:block;
+      width:24px;
+      height:1px;
+      background:#fff;
+      margin:6px auto;
+      transition:.3s
+    }
+
+    .mobile-panel{
+      position:fixed;
+      z-index:9400;
+      inset:0;
+      background:rgba(5,5,4,.985);
+      display:grid;
+      place-items:center;
+      opacity:0;
+      visibility:hidden;
+      transition:.4s var(--ease)
+    }
+
+    .mobile-panel.open{
+      opacity:1;
+      visibility:visible
+    }
+
+    .mobile-panel nav{
+      display:flex;
+      flex-direction:column;
+      gap:10px
+    }
+
+    .mobile-panel nav a{
+      font-family:Montserrat,sans-serif;
+      font-size:36px;
+      letter-spacing:-.03em;
+      text-transform:none;
+      padding:8px
+    }
+
+    .hero{
+      position:relative;
+      min-height:100svh;
+      display:flex;
+      align-items:flex-end;
+      overflow:hidden;
+      background:#050504
+    }
+
+    .hero-fallback,
+    .hero-video{
+      position:absolute;
+      inset:-4%;
+      width:108%;
+      height:108%;
+      object-fit:cover
+    }
+
+    .hero-fallback{
+      background-image:
+        linear-gradient(
+          180deg,
+          rgba(5,5,4,.15),
+          rgba(5,5,4,.88)
+        ),
+        url('./images/media-bg.jpg');
+      background-size:cover;
+      background-position:center
+    }
+
+    .hero-video{
+      opacity:.45;
+      filter:saturate(.72) contrast(1.12) brightness(.76);
+      animation:heroBreath 16s ease-in-out infinite alternate
+    }
+
+    .hero-overlay{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(5,5,4,.12),
+          rgba(5,5,4,.12) 42%,
+          rgba(5,5,4,.96)
+        ),
+        linear-gradient(
+          90deg,
+          rgba(5,5,4,.54),
+          transparent 55%,
+          rgba(5,5,4,.18)
+        )
+    }
+
+    .hero-orbit{
+      position:absolute;
+      z-index:1;
+      width:min(72vw,1040px);
+      aspect-ratio:1;
+      border:1px solid rgba(240,212,154,.085);
+      border-radius:50%;
+      left:52%;
+      top:51%;
+      transform:translate(-50%,-48%);
+      box-shadow:
+        0 0 150px rgba(214,177,106,.045),
+        inset 0 0 190px rgba(214,177,106,.025)
+    }
+
+    .hero-orbit:before,
+    .hero-orbit:after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      inset:8%;
+      border:1px solid rgba(255,255,255,.025)
+    }
+
+    .hero-orbit:after{
+      inset:18%;
+      border-color:rgba(240,212,154,.05)
+    }
+
+    .light-sweep{
+      position:absolute;
+      z-index:1;
+      top:-20%;
+      left:-40%;
+      width:34%;
+      height:150%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(240,212,154,.055),
+          transparent
+        );
+      transform:rotate(16deg);
+      animation:sweep 11s ease-in-out infinite
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:3;
+      width:100%;
+      padding:175px 0 58px
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:68px;
+      align-items:end
+    }
+
+    .hero h1{
+      font-family:Montserrat,sans-serif;
+      font-size:clamp(70px,9.2vw,150px);
+      font-weight:650;
+      line-height:.91;
+      letter-spacing:-.055em;
+      margin:22px 0 36px;
+      max-width:100%
+    }
+
+    .hero h1 .line{
+      display:block;
+      overflow:hidden;
+      padding-right:.08em;
+      padding-bottom:.06em
+    }
+
+    .hero h1 .line+.line{
+      margin-top:clamp(22px,1.8vw,34px)
+    }
+
+    .hero h1 .line i{
+      display:block;
+      font-style:normal;
+      transform:translateY(110%);
+      background-size:320% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation-name:titleUp,luxTextFlow;
+      animation-duration:1.05s,10s;
+      animation-timing-function:var(--ease),ease-in-out;
+      animation-fill-mode:forwards,none;
+      animation-iteration-count:1,infinite
+    }
+
+    .hero h1 .line:first-child i{
+      background-image:
+        linear-gradient(
+          105deg,
+          #f8f5ee 0%,
+          #fff 22%,
+          #d7c7a5 38%,
+          #fff 52%,
+          #d9b974 65%,
+          #f8f4eb 82%,
+          #fff 100%
+        )
+    }
+
+    .hero h1 .line:nth-child(2) i{
+      background-image:
+        linear-gradient(
+          105deg,
+          #8d622b 0%,
+          #d5aa61 18%,
+          #fff0c9 34%,
+          #b37d36 50%,
+          #f6dda7 68%,
+          #c49348 82%,
+          #f4d697 100%
+        );
+      animation-delay:.13s,0s
+    }
+
+    .hero-copy{
+      max-width:650px;
+      color:#aaa59b;
+      font-size:13px;
+      line-height:1.95
+    }
+
+    .hero-side p{
+      font-family:Montserrat,sans-serif;
+      font-size:clamp(28px,3.2vw,50px);
+      line-height:1.16;
+      margin:0 0 30px;
+      color:#ded8cc;
+      font-weight:500
+    }
+
+    .cta-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap
+    }
+
+    .btn{
+      position:relative;
+      overflow:hidden;
+      display:inline-flex;
+      align-items:center;
+      gap:14px;
+      border:1px solid rgba(214,177,106,.34);
+      padding:16px 23px;
+      font-size:8px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      background:rgba(255,255,255,.01);
+      transition:.4s var(--ease)
+    }
+
+    .btn:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          110deg,
+          rgba(240,212,154,.14),
+          transparent 60%
+        );
+      transform:translateX(-105%);
+      transition:.55s var(--ease)
+    }
+
+    .btn:hover:before{transform:none}
+
+    .btn:hover{
+      transform:translateY(-3px);
+      border-color:rgba(240,212,154,.75);
+      box-shadow:0 18px 48px rgba(0,0,0,.28)
+    }
+
+    .btn.primary{
+      background:
+        linear-gradient(
+          110deg,
+          #93672c,
+          #e0b66b
+        );
+      color:#0b0906;
+      border-color:transparent;
+      font-weight:800
+    }
+
+    .hero-tags{
+      margin-top:70px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(5,5,4,.35);
+      backdrop-filter:blur(12px)
+    }
+
+    .hero-tag{
+      padding:25px 28px;
+      border-right:1px solid rgba(255,255,255,.07)
+    }
+
+    .hero-tag:last-child{border:0}
+
+    .hero-tag b{
+      display:block;
+      font-family:Montserrat,sans-serif;
+      color:var(--gold2);
+      font-size:21px;
+      font-weight:600
+    }
+
+    .hero-tag small{
+      display:block;
+      margin-top:7px;
+      color:#726e67;
+      font-size:7px;
+      letter-spacing:.2em;
+      text-transform:uppercase
+    }
+
+    .scroll-cue{
+      position:absolute;
+      z-index:3;
+      right:42px;
+      bottom:38px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      transform:rotate(90deg);
+      transform-origin:right bottom;
+      color:#746f66;
+      font-size:7px;
+      letter-spacing:.22em;
+      text-transform:uppercase
+    }
+
+    .scroll-cue i{
+      width:54px;
+      height:1px;
+      background:
+        linear-gradient(
+          90deg,
+          var(--gold),
+          transparent
+        )
+    }
+
+    .marquee{
+      position:relative;
+      z-index:4;
+      overflow:hidden;
+      border-top:1px solid rgba(255,255,255,.055);
+      border-bottom:1px solid rgba(255,255,255,.055);
+      background:#070706
+    }
+
+    .marquee:before,
+    .marquee:after{
+      content:"";
+      position:absolute;
+      z-index:2;
+      top:0;
+      bottom:0;
+      width:120px;
+      pointer-events:none
+    }
+
+    .marquee:before{
+      left:0;
+      background:linear-gradient(90deg,#070706,transparent)
+    }
+
+    .marquee:after{
+      right:0;
+      background:linear-gradient(-90deg,#070706,transparent)
+    }
+
+    .marquee-track{
+      display:flex;
+      width:max-content;
+      animation:marquee 22s linear infinite;
+      will-change:transform
+    }
+
+    .marquee-group{
+      flex:0 0 auto;
+      padding:23px 0
+    }
+
+    .marquee span{
+      font-family:Montserrat,sans-serif;
+      font-size:17px;
+      letter-spacing:.18em;
+      color:#8e887f;
+      white-space:nowrap
+    }
+
+    .marquee b{
+      color:var(--gold2);
+      font-weight:600
+    }
+
+    .section-head{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:70px;
+      align-items:end;
+      margin-bottom:58px
+    }
+
+    .section-title{
+      font-family:Montserrat,sans-serif;
+      font-size:clamp(48px,5.3vw,86px);
+      line-height:1.08;
+      letter-spacing:-.04em;
+      margin:16px 0 0;
+      font-weight:600
+    }
+
+    .section-desc{
+      max-width:560px;
+      justify-self:end;
+      color:#98938a;
+      font-size:12px;
+      line-height:1.9
+    }
+
+    .section-title .gold,
+    .story-title .gold,
+    .team-title .gold,
+    .contact-title .gold{
+      background-image:
+        linear-gradient(
+          105deg,
+          #8d622b 0%,
+          #d5aa61 18%,
+          #fff0c9 34%,
+          #b37d36 50%,
+          #f6dda7 68%,
+          #c49348 82%,
+          #f4d697 100%
+        );
+      background-size:340% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation:goldFlow 8.5s ease-in-out infinite
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(34px);
+      filter:blur(6px);
+      transition:
+        opacity .9s var(--ease),
+        transform .9s var(--ease),
+        filter 1s var(--ease)
+    }
+
+    .reveal.in{
+      opacity:1;
+      transform:none;
+      filter:blur(0)
+    }
+
+    .clip{
+      clip-path:inset(0 0 100% 0);
+      transform:scale(1.04);
+      transition:
+        clip-path 1.15s var(--ease),
+        transform 1.35s var(--ease)
+    }
+
+    .clip.in{
+      clip-path:inset(0);
+      transform:none
+    }
+
     .parallax{will-change:transform}
 
-    /* story */
-    .story{background:linear-gradient(180deg,#060605,#0a0907)}
-    .story-layout{display:grid;grid-template-columns:.78fr 1.22fr;gap:78px;align-items:start}
-    .story-copy{position:sticky;top:150px;padding:30px 0 80px}
-    .story-copy h2{font-family:"Montserrat",sans-serif;font-size:clamp(46px,5.4vw,82px);line-height:1.12;margin:22px 0 40px;font-weight:600;letter-spacing:-.035em}.story-title span{display:block}.story-title span + span{margin-top:.22em}.story-title .gold{margin-top:.22em}
-    .story-copy p{max-width:520px;color:#99948a;line-height:1.95;font-size:12px}
-    .story-stack{display:grid;gap:22px}
-    .story-media{position:relative;min-height:640px;overflow:hidden;border:1px solid rgba(214,177,106,.14);background:radial-gradient(circle at 62% 40%,rgba(214,177,106,.14),transparent 30%),linear-gradient(135deg,#15120d,#080706 60%)}
-    .story-media.tall{min-height:820px}.story-media img{position:absolute;inset:0;height:112%;object-fit:cover;opacity:.86;top:-6%}
-    .story-media:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(5,5,4,.72))}
-    .story-index{position:absolute;z-index:2;left:24px;bottom:21px;font-size:8px;letter-spacing:.24em;color:var(--gold2)}
+    .story{
+      background:
+        linear-gradient(
+          180deg,
+          #060605,
+          #0a0907
+        )
+    }
 
-    /* projects */
+    .story-layout{
+      display:grid;
+      grid-template-columns:.8fr 1.2fr;
+      gap:78px;
+      align-items:start
+    }
+
+    .story-copy{
+      position:sticky;
+      top:145px;
+      padding:30px 0 80px
+    }
+
+    .story-title{
+      font-family:Montserrat,sans-serif;
+      font-size:clamp(50px,5.5vw,84px);
+      line-height:1.12;
+      letter-spacing:-.04em;
+      margin:22px 0 38px;
+      font-weight:600
+    }
+
+    .story-title span{
+      display:block;
+      background-size:320% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation:luxTextFlow 10s ease-in-out infinite
+    }
+
+    .story-title span:first-child{
+      background-image:
+        linear-gradient(
+          105deg,
+          #f7f4ed 0%,
+          #fffdf8 20%,
+          #d9c9a7 36%,
+          #fff 50%,
+          #d8b873 62%,
+          #f8f4eb 78%,
+          #fff 100%
+        )
+    }
+
+    .story-title .gold{
+      margin-top:.24em
+    }
+
+    .story-copy p{
+      max-width:540px;
+      color:#99948a;
+      line-height:1.95;
+      font-size:12px
+    }
+
+    .story-stack{
+      display:grid;
+      gap:22px
+    }
+
+    .story-media{
+      position:relative;
+      min-height:650px;
+      overflow:hidden;
+      border:1px solid rgba(214,177,106,.14);
+      background:
+        radial-gradient(
+          circle at 62% 40%,
+          rgba(214,177,106,.14),
+          transparent 30%
+        ),
+        linear-gradient(
+          135deg,
+          #15120d,
+          #080706 60%
+        )
+    }
+
+    .story-media.tall{
+      min-height:820px
+    }
+
+    .story-media img{
+      position:absolute;
+      inset:0;
+      height:112%;
+      object-fit:cover;
+      opacity:.9;
+      top:-6%;
+      transition:
+        transform 1.2s var(--ease),
+        filter 1s ease
+    }
+
+    .story-media:hover img{
+      transform:scale(1.04);
+      filter:saturate(.95)
+    }
+
+    .story-media:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          180deg,
+          transparent 48%,
+          rgba(5,5,4,.72)
+        )
+    }
+
+    .story-index{
+      position:absolute;
+      z-index:2;
+      left:24px;
+      bottom:21px;
+      font-size:8px;
+      letter-spacing:.24em;
+      color:var(--gold2)
+    }
+
     .projects{background:#070706}
-    .project-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
-    .project-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.075);background:radial-gradient(circle at 70% 30%,rgba(214,177,106,.16),transparent 28%),linear-gradient(135deg,#17140e,#090807 60%);cursor:pointer;transform-style:preserve-3d;transition:border-color .4s ease,box-shadow .5s ease}
-    .project-card:nth-child(1){grid-column:span 7;aspect-ratio:16/9}.project-card:nth-child(2){grid-column:span 5;aspect-ratio:16/11}.project-card:nth-child(3){grid-column:3/span 8;aspect-ratio:16/9;margin-top:12px}
-    .project-card:before{content:"";position:absolute;inset:-1px;z-index:1;background:linear-gradient(115deg,transparent 30%,rgba(240,212,154,.18),transparent 70%);transform:translateX(-120%);transition:transform 1s var(--ease);pointer-events:none}.project-card:hover:before{transform:translateX(120%)}
-    .project-card:hover{border-color:rgba(240,212,154,.32);box-shadow:0 30px 90px rgba(0,0,0,.34)}
-    .project-card video,.project-card img{position:absolute;inset:0;height:100%;object-fit:cover;transition:transform 1s var(--ease),filter 1s var(--ease);filter:saturate(.75) brightness(.7)}
-    .project-card:hover video,.project-card:hover img{transform:scale(1.055);filter:saturate(.96) brightness(.86)}
-    .project-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.03),rgba(0,0,0,.78));pointer-events:none}
-    .project-meta{position:absolute;z-index:3;left:26px;right:26px;bottom:24px;display:flex;align-items:end;justify-content:space-between;gap:20px;transform:translateZ(28px)}
-    .project-meta b{display:block;font-family:"Montserrat",sans-serif;font-size:clamp(24px,2.3vw,38px);font-weight:500}.project-meta small{display:block;margin-top:7px;color:#9a958c;font-size:7px;letter-spacing:.2em;text-transform:uppercase}.project-no{font-family:"Montserrat",sans-serif;color:var(--gold2);font-size:26px}
-    .video-badge{position:absolute;z-index:4;top:18px;right:18px;padding:9px 12px;border:1px solid rgba(240,212,154,.22);background:rgba(5,5,4,.45);backdrop-filter:blur(9px);font-size:7px;letter-spacing:.18em;color:#c8b98f}
 
-    /* 360 */
-    .immersive{background:radial-gradient(circle at 50% 24%,rgba(214,177,106,.085),transparent 36%),#060605}
-    .pano-wrap{position:relative;height:700px;border:1px solid rgba(214,177,106,.25);overflow:hidden;background:radial-gradient(ellipse at 30% 55%,rgba(92,121,110,.18),transparent 34%),radial-gradient(ellipse at 70% 40%,rgba(202,154,77,.18),transparent 25%),linear-gradient(125deg,#11110d,#070706 60%);box-shadow:0 45px 120px rgba(0,0,0,.48)}
-    .pano-wrap:before{content:"";position:absolute;z-index:4;inset:0;pointer-events:none;box-shadow:inset 0 0 110px rgba(0,0,0,.4)}
-    #panorama360{position:absolute;inset:0;width:100%;height:100%}
-    .pano-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:0;padding:40px;background:linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.03) 50%,transparent 50.2%),linear-gradient(0deg,transparent 49.8%,rgba(255,255,255,.03) 50%,transparent 50.2%)}
-    .pano-fallback strong{font-family:"Montserrat",sans-serif;font-size:48px;font-weight:500}.pano-fallback span{display:block;margin-top:14px;color:#8f8a82;font-size:9px;letter-spacing:.2em}
-    .pano-hud{position:absolute;z-index:5;left:50%;bottom:22px;transform:translateX(-50%);padding:11px 16px;border:1px solid rgba(214,177,106,.3);background:rgba(6,6,5,.64);backdrop-filter:blur(12px);font-size:7px;letter-spacing:.2em;color:var(--gold2);pointer-events:none}
-
-    /* team */
-    .team{background:linear-gradient(180deg,#070706,#0a0907)}
-    .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .person{position:relative;background:var(--panel);border:1px solid rgba(255,255,255,.07);overflow:hidden;transition:.5s var(--ease);transform-style:preserve-3d}.person:hover{border-color:rgba(240,212,154,.25);transform:translateY(-8px)}
-    .person-media{position:relative;aspect-ratio:4/5;background:linear-gradient(150deg,#191712,#090807);overflow:hidden}.person-media:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 32%,rgba(240,212,154,.14),transparent 28%);z-index:0}
-    .person-media img{position:relative;z-index:1;height:100%;object-fit:cover;filter:saturate(.72) contrast(1.03);transition:.85s var(--ease)}.person:hover img{transform:scale(1.045);filter:saturate(.9)}
-    .person-media:after{content:"";position:absolute;z-index:2;inset:0;background:linear-gradient(180deg,transparent 52%,rgba(6,6,5,.8))}
-    .person-info{position:relative;padding:25px 24px 29px}.role{font-size:7px;letter-spacing:.24em;color:var(--gold2);text-transform:uppercase}.person h3{font-family:"Montserrat",sans-serif;font-size:28px;font-weight:500;margin:9px 0 0}
-    .team-title{line-height:1.08;max-width:1040px}.team-title .gold{display:inline-block;white-space:nowrap;margin-top:.22em}
-
-    /* final brand statement + contact */
-    .contact{padding:175px 0 130px;background:radial-gradient(circle at 50% 46%,rgba(214,177,106,.095),transparent 40%),#060605;text-align:center;overflow:hidden}
-    .contact:before{content:"";position:absolute;width:880px;height:880px;left:50%;top:50%;transform:translate(-50%,-47%);border:1px solid rgba(240,212,154,.055);border-radius:50%;box-shadow:0 0 140px rgba(214,177,106,.03)}
-    .contact h2{position:relative;font-family:"Montserrat",sans-serif;font-size:clamp(42px,6.5vw,104px);line-height:1.12;font-weight:600;letter-spacing:-.035em;margin:24px auto 52px;max-width:1440px}.contact-title .contact-line{display:block}.contact-title .contact-line + .contact-line{margin-top:.20em}
-    .contact h2 span{display:block}.contact-title .contact-line{white-space:nowrap}.contact-title .gold{margin-top:.14em}.contact p{position:relative;max-width:720px;margin:0 auto 38px;color:#99948a;line-height:1.95;font-size:12px}
-    .contact-links{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:980px;margin:50px auto 0}
-    .contact-link{display:flex;align-items:center;gap:14px;padding:18px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);text-align:left;transition:.4s var(--ease)}.contact-link:hover{transform:translateY(-4px);border-color:rgba(240,212,154,.3);background:rgba(240,212,154,.035)}
-    .contact-link img{width:32px;height:32px;object-fit:contain;border-radius:8px}.contact-link b{display:block;font-size:9px;letter-spacing:.15em;text-transform:uppercase}.contact-link small{display:block;margin-top:5px;color:#7f796f;font-size:8px}
-    .policy-note{position:relative;margin:28px auto 0;color:#625e57;font-size:7px;letter-spacing:.14em;text-transform:uppercase}
-
-    .footer-social{display:flex;align-items:center;justify-content:center;gap:64px;margin:0 auto 34px;flex-wrap:wrap}
-    .footer-social a{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:72px;color:#8e897f;transition:.4s var(--ease)}
-    .footer-social a:hover{color:var(--gold2);transform:translateY(-5px)}
-    .footer-social img{width:42px;height:42px;object-fit:contain;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 10px 30px rgba(0,0,0,.28);transition:.4s var(--ease)}
-    .footer-social a:hover img{transform:scale(1.08);box-shadow:0 12px 36px rgba(201,159,84,.16)}
-    .footer-social span{font-size:7px;letter-spacing:.22em;text-transform:uppercase}
-    footer{position:relative;z-index:3;padding:28px 0 44px;border-top:1px solid rgba(255,255,255,.06);color:#6d6962;font-size:7px;letter-spacing:.16em;text-transform:uppercase}.footer-row{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
-
-
-    /* premium interaction layer — Framer-inspired motion, original implementation */
-    .contact,.story,.projects,.team,.panorama-section{isolation:isolate}
-    .story-copy,.section-head,.contact .shell{transform-style:preserve-3d}
-    .reveal{filter:blur(7px);transition:opacity .95s var(--ease),transform .95s var(--ease),filter 1.05s var(--ease)}
-    .reveal.in{filter:blur(0)}
-    .spotlight-card{position:relative;overflow:hidden}
-    .spotlight-card:before{content:"";position:absolute;inset:-1px;pointer-events:none;background:radial-gradient(280px circle at var(--sx,50%) var(--sy,50%),rgba(240,212,154,.14),transparent 48%);opacity:0;transition:opacity .35s ease}
-    .spotlight-card:hover:before{opacity:1}
-    .contact-link{min-height:92px}
-    .social-svg,.footer-svg{display:grid;place-items:center;flex:0 0 auto;background:#f3f2ee;color:#1677f2;border-radius:50%}
-    .social-svg{width:32px;height:32px;border-radius:8px}.social-svg svg{width:21px;height:21px;fill:currentColor}
-    .footer-svg{width:42px;height:42px;box-shadow:0 10px 30px rgba(0,0,0,.28)}.footer-svg svg{width:27px;height:27px;fill:currentColor}.brand-icon{display:grid;place-items:center;flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:#f3f2ee;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.2)}.brand-icon svg{width:22px;height:22px;display:block}.brand-icon.tiktok{background:#0b0b0b}.brand-icon.zalo{background:#fff;color:#1167d8;font:800 10px/1 Arial,sans-serif;letter-spacing:-.04em}.brand-icon.facebook{background:#f3f2ee;color:#1677f2}.footer-social .brand-icon{width:42px;height:42px}.footer-social .brand-icon svg{width:27px;height:27px}.footer-social .brand-icon.zalo{font-size:12px}
-    .section-title,.story-title,.contact-title{position:relative}
-    .section-title:after,.story-title:after{content:"";display:block;width:0;height:1px;background:linear-gradient(90deg,var(--gold2),transparent);margin-top:22px;transition:width 1.2s var(--ease)}
-    .reveal.in .section-title:after,.story-copy.reveal.in .story-title:after{width:min(220px,36%)}
-    .project-card,.person,.contact-link{--sx:50%;--sy:50%}
-    .project-card .project-meta,.person-info{transition:transform .6s var(--ease)}
-    .project-card:hover .project-meta{transform:translate3d(0,-8px,28px)}
-    .person:hover .person-info{transform:translateY(-5px)}
-    .hero-side,.hero-copy{transition:transform .4s ease-out}
-    .gold{transition:text-shadow .5s ease,color .5s ease}
-    .reveal.in .gold{ text-shadow:0 0 28px rgba(240,212,154,.055)}
-
-    /* audio */
-    .sound{position:fixed;right:28px;bottom:28px;z-index:9600;width:60px;height:60px;border-radius:50%;border:1px solid rgba(214,177,106,.5);background:rgba(6,6,5,.72);backdrop-filter:blur(12px);display:grid;place-items:center;cursor:pointer;transition:.4s var(--ease);box-shadow:0 10px 40px rgba(0,0,0,.3)}.sound:hover{transform:scale(1.07);border-color:var(--gold2)}
-    .sound-label{position:absolute;right:72px;white-space:nowrap;font-size:7px;letter-spacing:.2em;color:#77736c;text-transform:uppercase}.eq{height:16px;display:flex;align-items:center;gap:2px}.eq i{display:block;width:2px;height:5px;background:var(--gold2);transform-origin:bottom}.sound.playing .eq i:nth-child(1){animation:eq .65s infinite alternate}.sound.playing .eq i:nth-child(2){animation:eq .48s .1s infinite alternate}.sound.playing .eq i:nth-child(3){animation:eq .7s .2s infinite alternate}.sound.playing .eq i:nth-child(4){animation:eq .52s .05s infinite alternate}@keyframes eq{to{height:16px}}
-
-    @media(max-width:1050px){
-      .shell{width:min(var(--max),calc(100% - 38px))}header{height:72px}.nav{height:72px}header nav{display:none}.menu-btn{display:block}
-      .hero-content{padding-top:145px}.hero-grid,.section-head,.story-layout{grid-template-columns:1fr}.hero-side{max-width:620px}.hero-tags{grid-template-columns:repeat(2,1fr)}.hero-tag:nth-child(2){border-right:0}.hero-tag:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.07)}
-      section{padding:110px 0}.section-head{gap:28px}.section-desc{justify-self:start}.story-copy{position:relative;top:auto;padding-bottom:20px}.story-media,.story-media.tall{min-height:560px}
-      .project-card:nth-child(n){grid-column:span 6;aspect-ratio:16/10;margin:0}.project-card:nth-child(3){grid-column:3/span 8}.team-grid{grid-template-columns:1fr 1fr}.person:last-child{grid-column:1/-1}.pano-wrap{height:560px}.contact-links{grid-template-columns:repeat(2,1fr)}
-    }
-    @media(max-width:680px){
-      .shell{width:calc(100% - 26px)}.cursor-dot,.cursor-ring,.mouse-glow{display:none}.hero h1{font-size:64px;line-height:.94;letter-spacing:-.045em}.hero-copy{font-size:11px}.hero-tags{margin-top:52px}.hero-tag{padding:18px 16px}.hero-tag b{font-size:18px}.scroll-cue{display:none}
-      section{padding:88px 0}.section-title{font-size:46px;line-height:1.10}.story-copy h2{font-size:48px;line-height:1.14}.story-media,.story-media.tall{min-height:430px}.project-grid{display:grid;grid-template-columns:1fr}.project-card:nth-child(n){grid-column:auto;aspect-ratio:16/10}.pano-wrap{height:450px}.pano-fallback strong{font-size:34px}.team-grid{grid-template-columns:1fr}.person:last-child{grid-column:auto}.contact{padding:120px 0 100px}.contact h2{font-size:clamp(28px,8vw,46px);line-height:1.08}.contact-links{grid-template-columns:1fr}.contact-link:last-child{grid-column:auto}.sound{right:16px;bottom:16px;width:54px;height:54px}.sound-label{display:none}.marquee span{font-size:14px;letter-spacing:.11em}.footer-social{gap:24px}.footer-social img,.footer-svg{width:38px;height:38px}
-    }
-    @media(max-width:1050px){.contact-title .contact-line{white-space:normal}.story-copy h2{line-height:1.12}.team-title{line-height:1.10}}
-    @media(max-width:680px){.contact-title .contact-line{white-space:normal}.contact-title .gold{margin-top:.22em}.story-title .gold{margin-top:.24em}.team-title .gold{margin-top:.24em}.marquee-track{animation-duration:15s}}
-    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.reveal,.clip-reveal{opacity:1!important;transform:none!important;clip-path:none!important}}
-
-    /* V4.2 SANS TYPOGRAPHY OVERRIDES */
-    h1,h2,h3,.loader-mark,.section-title,.story-title,.team-title,.contact-title,.project-meta b,.person h3,.hero-tag b,.pano-fallback strong,.marquee span,.mobile-panel nav a{font-family:"Montserrat",sans-serif}
-    h1,h2,h3{font-kerning:normal;text-rendering:geometricPrecision}
-    .hero-grid>div,.section-head>div,.story-copy{min-width:0}
-    .hero h1 i,.section-title,.story-title,.team-title,.contact-title{overflow-wrap:normal;word-break:keep-all}
-  </style>
-</head>
-<body class="is-loading">
-  <canvas id="ambient"></canvas>
-  <div class="mouse-glow"></div><div class="noise"></div><div id="progress"></div>
-  <div class="cursor-dot"></div><div class="cursor-ring"></div>
-
-  <div class="loader" id="loader"><div class="loader-inner"><div class="loader-mark">HUY<span style="color:var(--gold2)">DJI</span></div><div class="loader-sub">Cinematic Visual Portfolio</div><div class="loader-line"><i></i></div></div></div>
-
-  <header id="header">
-    <div class="shell nav">
-      <a class="brand magnetic" href="#top" aria-label="HUYDJI Home"><strong>HUY<span>DJI</span></strong><small>Premium Media</small></a>
-      <nav><a href="#story">Giới thiệu</a><a href="#projects">Dự án</a><a href="#view360">360°</a><a href="#team">Đội ngũ</a><a href="#contact">Liên hệ</a></nav>
-      <button class="menu-btn" id="menuBtn" aria-label="Mở menu"><span></span></button>
-    </div>
-  </header>
-  <div class="mobile-panel" id="mobilePanel"><nav><a href="#story">Giới thiệu</a><a href="#projects">Dự án</a><a href="#view360">360°</a><a href="#team">Đội ngũ</a><a href="#contact">Liên hệ</a></nav></div>
-
-  <main id="top">
-    <section class="hero">
-      <div class="hero-fallback"></div>
-      <video class="hero-media parallax" data-speed="-0.05" autoplay muted loop playsinline preload="metadata" poster="./images/media-bg.jpg"><source src="./videos/hero.mp4" type="video/mp4"></video>
-      <div class="hero-overlay"></div><div class="hero-orbit parallax" data-speed="0.025"></div><div class="light-sweep"></div>
-      <div class="shell hero-content">
-        <div class="hero-grid">
-          <div>
-            <div class="eyebrow reveal">Cinematic · Real Estate · Events · Flycam · 360°</div>
-            <h1><span class="line"><i>HUYDJI</i></span><span class="line gold"><i>MEDIA</i></span></h1>
-            <p class="hero-copy reveal">Một không gian giới thiệu hình ảnh và dấu ấn thị giác của HUYDJI MEDIA, nơi điện ảnh, kiến trúc, chuyển động và công nghệ được kết nối trong cùng một ngôn ngữ hình ảnh.</p>
-          </div>
-          <div class="hero-side reveal"><p>Tầm nhìn kiến tạo <span class="gold">không gian.</span><br>Hình ảnh nâng tầm <span class="gold">giá trị.</span></p><div class="cta-row"><a class="btn primary magnetic" href="#projects">Xem dự án <span>→</span></a><a class="btn magnetic" href="#contact">Thông tin liên hệ <span>↗</span></a></div></div>
-        </div>
-        <div class="hero-tags reveal"><div class="hero-tag"><b>Cinematic</b><small>Visual Direction</small></div><div class="hero-tag"><b>Real Estate</b><small>Architecture Visual</small></div><div class="hero-tag"><b>Flycam</b><small>Aerial Perspective</small></div><div class="hero-tag"><b>360°</b><small>Immersive Space</small></div></div>
-      </div>
-      <div class="scroll-cue"><span>Scroll to explore</span><i></i></div>
-    </section>
-
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <div class="marquee-group"><span><b>HUYDJI MEDIA</b> · CINEMATIC · REAL ESTATE · FLYCAM · EVENT · 360° IMMERSIVE · VISUAL DIRECTION ·</span></div>
-        <div class="marquee-group"><span><b>HUYDJI MEDIA</b> · CINEMATIC · REAL ESTATE · FLYCAM · EVENT · 360° IMMERSIVE · VISUAL DIRECTION ·</span></div>
-      </div>
-    </div>
-
-    <section class="story" id="story">
-      <div class="shell story-layout">
-        <div class="story-copy reveal"><div class="eyebrow">Architecture · Resort · Real Estate</div><h2 class="story-title"><span>Không gian được kể bằng</span><span class="gold">điện ảnh.</span></h2><p>Từng khung hình được tổ chức bằng ánh sáng, chiều sâu, nhịp chuyển động và tỷ lệ không gian, giúp kiến trúc và bất động sản có một ngôn ngữ thị giác nhất quán, tinh gọn và cao cấp.</p><div class="cta-row" style="margin-top:30px"><a class="btn magnetic" href="#view360">Khám phá 360° <span>→</span></a></div></div>
-        <div class="story-stack">
-          <div class="story-media tall clip-reveal"><img class="parallax" data-speed="0.035" src="./images/villa.jpg" alt="Không gian bất động sản" onerror="this.remove()"><div class="story-index">01 / REAL ESTATE VISUAL</div></div>
-          <div class="story-media clip-reveal" style="min-height:470px"><img class="parallax" data-speed="0.025" src="./images/media-bg.jpg" alt="Cinematic media" onerror="this.remove()"><div class="story-index">02 / CINEMATIC DIRECTION</div></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="projects" id="projects">
-      <div class="shell">
-        <div class="section-head"><div class="reveal"><div class="eyebrow">Selected Visuals</div><h2 class="section-title">Dự án <span class="gold">nổi bật.</span></h2></div><p class="section-desc reveal">Ba khung video ngang giữ nguyên tên file để bạn bổ sung sau. Khi MP4 xuất hiện đúng đường dẫn, website tự sử dụng video và vẫn có poster ảnh khi video chưa sẵn sàng.</p></div>
-        <div class="project-grid">
-          <article class="project-card reveal tilt"><video muted loop playsinline preload="metadata" poster="./images/wedding.jpg"><source src="./videos/project-01.mp4" type="video/mp4"></video><div class="video-badge">VIDEO 01</div><div class="project-meta"><div><b>Luxury Event</b><small>Wedding · Event Visual</small></div><div class="project-no">01</div></div></article>
-          <article class="project-card reveal tilt"><video muted loop playsinline preload="metadata" poster="./images/stage.jpg"><source src="./videos/project-02.mp4" type="video/mp4"></video><div class="video-badge">VIDEO 02</div><div class="project-meta"><div><b>Stage & Performance</b><small>Live Stage · Cinematic</small></div><div class="project-no">02</div></div></article>
-          <article class="project-card reveal tilt"><video muted loop playsinline preload="metadata" poster="./images/media-bg.jpg"><source src="./videos/project-03.mp4" type="video/mp4"></video><div class="video-badge">VIDEO 03</div><div class="project-meta"><div><b>Commercial & Flycam</b><small>Brand Visual · Aerial</small></div><div class="project-no">03</div></div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="immersive" id="view360">
-      <div class="shell"><div class="section-head"><div class="reveal"><div class="eyebrow">Immersive Experience</div><h2 class="section-title">Không gian <span class="gold">360°.</span></h2></div><p class="section-desc reveal">Kéo để xoay, cuộn để zoom và mở toàn màn hình. Viewer sử dụng chính file <b>images/panorama-360.jpg</b>.</p></div>
-        <div class="pano-wrap clip-reveal"><div class="pano-fallback" id="panoFallback"><div><strong>360° READY</strong><span>./images/panorama-360.jpg</span></div></div><div id="panorama360"></div><div class="pano-hud">KÉO ĐỂ KHÁM PHÁ 360°</div></div>
-      </div>
-    </section>
-
-    <section class="team" id="team">
-      <div class="shell"><div class="section-head"><div class="reveal"><div class="eyebrow">Media Network</div><h2 class="section-title team-title">Đội ngũ hợp tác<br><span class="gold">chiến lược.</span></h2></div><p class="section-desc reveal">Hình ảnh đội ngũ được trình bày theo phong cách editorial, tập trung vào vai trò sáng tạo và cộng tác trong hệ sinh thái HUYDJI MEDIA.</p></div>
-        <div class="team-grid"><article class="person reveal tilt"><div class="person-media"><img src="./director/director-01.png" alt="Phạm Quốc Huy" onerror="this.remove()"></div><div class="person-info"><div class="role">Nhà sáng tạo</div><h3>Phạm Quốc Huy</h3></div></article><article class="person reveal tilt"><div class="person-media"><img src="./director/director-02.png" alt="Hợp tác chiến lược Media" onerror="this.remove()"></div><div class="person-info"><div class="role">Hợp tác chiến lược</div><h3>Media</h3></div></article><article class="person reveal tilt"><div class="person-media"><img src="./director/director-03.png" alt="Team HUY DJI" onerror="this.remove()"></div><div class="person-info"><div class="role">Media Team</div><h3>Team HUY DJI</h3></div></article></div>
-      </div>
-    </section>
-
-    <section class="contact" id="contact">
-      <div class="shell">
-        <div class="eyebrow reveal">HUYDJI MEDIA · VISUAL PORTFOLIO</div>
-        <h2 class="reveal contact-title"><span class="contact-line">KIẾN TẠO GIÁ TRỊ</span><span class="contact-line gold">ĐỊNH HÌNH TƯƠNG LAI.</span></h2>
-        <p class="reveal">Bất động sản · Kiến trúc · Resort · Villa · Flycam · 360° Immersive · Premium Media. Không gian giới thiệu hình ảnh, dự án, trải nghiệm thị giác và thông tin liên hệ của HUYDJI MEDIA.</p>
-        <div class="contact-links reveal">
-          <a class="contact-link magnetic spotlight-card" href="https://zalo.me/0337046094" target="_blank" rel="noopener noreferrer" aria-label="Zalo 0337046094">
-            <span class="brand-icon zalo" aria-hidden="true">Zalo</span>
-            <div><b>Zalo</b><small>0337046094</small></div>
-          </a>
-          <a class="contact-link magnetic spotlight-card" href="https://www.tiktok.com/@huydjimini2" target="_blank" rel="noopener noreferrer" aria-label="TikTok @huydjimini2">
-            <span class="brand-icon tiktok" aria-hidden="true">
-              <svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path fill="#25F4EE" d="M9.3 8.4v7a2.8 2.8 0 1 1-2-2.7v-2.8a5.6 5.6 0 1 0 4.8 5.5V8.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.6-.1-4.5-1.8-4.8-4.1H9.3v4.9Z"/><path fill="#FE2C55" d="M10.4 7.4v7a2.8 2.8 0 1 1-2-2.7v2.1a2.8 2.8 0 0 0 4-2.5V7.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.3-.2-3.9-1.6-4.4-3.6h-2.3v3.4Z"/><path fill="#fff" d="M10.4 7.4v6.7a2.8 2.8 0 1 1-2-2.7v2a2.8 2.8 0 0 0 4-2.5V7.9c1.1.8 2.4 1.3 3.9 1.4V7.6c-2-.3-3.4-1.5-3.9-3.2h-2v3Z"/></svg>
-            </span>
-            <div><b>TikTok</b><small>@huydjimini2</small></div>
-          </a>
-          <a class="contact-link magnetic spotlight-card" href="https://www.facebook.com/share/1CxT2uHXdv/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-            <span class="brand-icon facebook" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M13.7 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V4a22 22 0 0 0-2.4-.1c-2.4 0-4.1 1.5-4.1 4.2V10H8v3h2.5v8h3.2Z"/></svg></span>
-            <div><b>Facebook</b><small>HUYDJI MEDIA</small></div>
-          </a>
-        </div>
-        <div class="policy-note reveal">Portfolio · Image showcase · Contact information only</div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="shell">
-      <div class="footer-social" aria-label="Liên hệ nhanh">
-        <a class="magnetic" href="https://zalo.me/0337046094" target="_blank" rel="noopener noreferrer" aria-label="Zalo 0337046094">
-          <span class="brand-icon zalo" aria-hidden="true">Zalo</span>
-          <span>Zalo</span>
-        </a>
-        <a class="magnetic" href="https://www.tiktok.com/@huydjimini2" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-          <span class="brand-icon tiktok" aria-hidden="true">
-            <svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path fill="#25F4EE" d="M9.3 8.4v7a2.8 2.8 0 1 1-2-2.7v-2.8a5.6 5.6 0 1 0 4.8 5.5V8.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.6-.1-4.5-1.8-4.8-4.1H9.3v4.9Z"/><path fill="#FE2C55" d="M10.4 7.4v7a2.8 2.8 0 1 1-2-2.7v2.1a2.8 2.8 0 0 0 4-2.5V7.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.3-.2-3.9-1.6-4.4-3.6h-2.3v3.4Z"/><path fill="#fff" d="M10.4 7.4v6.7a2.8 2.8 0 1 1-2-2.7v2a2.8 2.8 0 0 0 4-2.5V7.9c1.1.8 2.4 1.3 3.9 1.4V7.6c-2-.3-3.4-1.5-3.9-3.2h-2v3Z"/></svg>
-          </span>
-          <span>TikTok</span>
-        </a>
-        <a class="magnetic" href="https://www.facebook.com/share/1CxT2uHXdv/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-          <span class="brand-icon facebook" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M13.7 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V4a22 22 0 0 0-2.4-.1c-2.4 0-4.1 1.5-4.1 4.2V10H8v3h2.5v8h3.2Z"/></svg></span>
-          <span>Facebook</span>
-        </a>
-      </div>
-      <div class="footer-row"><span>© 2026 HUYDJI MEDIA</span><span>Cinematic Visual Portfolio</span></div>
-    </div>
-  </footer>
-
-  <audio id="bgMusic" loop preload="auto"><source src="./audio/bg-music.mp3" type="audio/mpeg"></audio>
-  <button class="sound magnetic" id="soundBtn" aria-label="Bật / tắt nhạc"><span class="sound-label">Sound off · click to play</span><span class="eq"><i></i><i></i><i></i><i></i></span></button>
-
-  <script>
-    const $=(s,scope=document)=>scope.querySelector(s), $$=(s,scope=document)=>[...scope.querySelectorAll(s)];
-    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // loader
-    window.addEventListener('load',()=>setTimeout(()=>{$('#loader').classList.add('off');document.body.classList.remove('is-loading')},520));
-
-    // reveal + clip reveal
-    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1,rootMargin:'0px 0px -7%'});
-    $$('.reveal,.clip-reveal').forEach(el=>io.observe(el));
-
-    // scroll progress + parallax + smart header
-    let lastY=0,ticking=false;
-    function onScroll(){if(ticking)return;ticking=true;requestAnimationFrame(()=>{
-      const h=document.documentElement,y=scrollY,max=h.scrollHeight-h.clientHeight;$('#progress').style.width=(max?y/max*100:0)+'%';
-      const header=$('#header');header.classList.toggle('scrolled',y>40);header.classList.toggle('hide',y>180&&y>lastY+3);lastY=y;
-      const mq=$('.marquee-track'); if(mq) mq.style.setProperty('--scrollY',y);
-      if(!reduce){$$('.parallax').forEach(el=>{const r=el.getBoundingClientRect(),speed=parseFloat(el.dataset.speed||0);el.style.transform=`translate3d(0,${(innerHeight*.5-r.top)*speed}px,0)`})}
-      ticking=false;
-    })}
-    addEventListener('scroll',onScroll,{passive:true});onScroll();
-
-    // cursor + mouse glow
-    if(matchMedia('(pointer:fine)').matches){
-      document.body.classList.add('cursor-on');const dot=$('.cursor-dot'),ring=$('.cursor-ring');let rx=0,ry=0,mx=0,my=0;
-      addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.transform=`translate(${mx}px,${my}px)`;document.documentElement.style.setProperty('--mx',mx+'px');document.documentElement.style.setProperty('--my',my+'px')});
-      const loop=()=>{rx+=(mx-rx)*.16;ry+=(my-ry)*.16;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(loop)};loop();
-      $$('a,button,.tilt').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'))});
+    .project-grid{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      gap:18px
     }
 
-    // magnetic hover
-    if(matchMedia('(pointer:fine)').matches&&!reduce){$$('.magnetic').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;el.style.transform=`translate(${x*.12}px,${y*.12}px)`});el.addEventListener('mouseleave',()=>el.style.transform='')})}
+    .project-card{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.075);
+      background:
+        radial-gradient(
+          circle at 70% 30%,
+          rgba(214,177,106,.16),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #17140e,
+          #090807 60%
+        );
+      cursor:pointer;
+      transform-style:preserve-3d;
+      transition:
+        border-color .4s ease,
+        box-shadow .5s ease
+    }
 
-    // 3d tilt cards
-    if(matchMedia('(pointer:fine)').matches&&!reduce){$$('.tilt').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transform=`perspective(900px) rotateX(${-y*4}deg) rotateY(${x*5}deg) translateY(-3px)`});el.addEventListener('mouseleave',()=>el.style.transform='')})}
+    .project-card:nth-child(1){
+      grid-column:span 7;
+      aspect-ratio:16/9
+    }
 
-    // mobile menu
-    const menuBtn=$('#menuBtn'),mobilePanel=$('#mobilePanel');menuBtn.addEventListener('click',()=>mobilePanel.classList.toggle('open'));$$('a',mobilePanel).forEach(a=>a.addEventListener('click',()=>mobilePanel.classList.remove('open')));
+    .project-card:nth-child(2){
+      grid-column:span 5;
+      aspect-ratio:16/11
+    }
 
-    // project videos: hover desktop, viewport mobile
-    $$('.project-card').forEach(card=>{const v=$('video',card);if(!v)return;card.addEventListener('mouseenter',()=>v.play().catch(()=>{}));card.addEventListener('mouseleave',()=>{v.pause();v.currentTime=0})});
-    const vio=new IntersectionObserver(es=>es.forEach(e=>{const v=$('video',e.target);if(!v)return;if(matchMedia('(pointer:coarse)').matches){e.isIntersecting?v.play().catch(()=>{}):v.pause()}}),{threshold:.65});$$('.project-card').forEach(c=>vio.observe(c));
+    .project-card:nth-child(3){
+      grid-column:3/span 8;
+      aspect-ratio:16/9;
+      margin-top:12px
+    }
 
-    // background music: browser will usually require first user interaction
-    const music=$('#bgMusic'),soundBtn=$('#soundBtn'),label=$('.sound-label',soundBtn);music.volume=.2;
-    function soundState(on){soundBtn.classList.toggle('playing',on);label.textContent=on?'Sound on · click to mute':'Sound off · click to play'}
-    async function startMusic(){if(!music.paused)return;try{await music.play();soundState(true)}catch(e){}}
-    soundBtn.addEventListener('click',e=>{e.stopPropagation();music.paused?startMusic():(music.pause(),soundState(false))});
-    ['pointerdown','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,startMusic,{once:true,passive:true}));
+    .project-card:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      z-index:1;
+      background:
+        linear-gradient(
+          115deg,
+          transparent 30%,
+          rgba(240,212,154,.18),
+          transparent 70%
+        );
+      transform:translateX(-120%);
+      transition:transform 1s var(--ease);
+      pointer-events:none
+    }
 
+    .project-card:hover:before{
+      transform:translateX(120%)
+    }
 
-    // premium hover spotlight + subtle depth response
-    if(matchMedia('(pointer:fine)').matches&&!reduce){
-      $$('.contact-link').forEach(el=>{
-        el.addEventListener('mousemove',e=>{
-          const r=el.getBoundingClientRect();
-          el.style.setProperty('--sx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
-          el.style.setProperty('--sy',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
-        });
-      });
-      const hero=$('.hero');
-      if(hero){
-        hero.addEventListener('mousemove',e=>{
-          const nx=(e.clientX/innerWidth-.5),ny=(e.clientY/innerHeight-.5);
-          const side=$('.hero-side'),copy=$('.hero-copy');
-          if(side) side.style.transform=`translate3d(${nx*10}px,${ny*7}px,0)`;
-          if(copy) copy.style.transform=`translate3d(${nx*-6}px,${ny*-4}px,0)`;
-        });
-        hero.addEventListener('mouseleave',()=>{$$('.hero-side,.hero-copy').forEach(el=>el.style.transform='')});
+    .project-card:hover{
+      border-color:rgba(240,212,154,.32);
+      box-shadow:0 30px 90px rgba(0,0,0,.34)
+    }
+
+    .project-card video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter:saturate(.76) brightness(.72);
+      transition:
+        transform 1s var(--ease),
+        filter 1s var(--ease)
+    }
+
+    .project-card:hover video{
+      transform:scale(1.055);
+      filter:saturate(.98) brightness(.86)
+    }
+
+    .project-card:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0,0,0,.02),
+          rgba(0,0,0,.8)
+        );
+      pointer-events:none
+    }
+
+    .project-meta{
+      position:absolute;
+      z-index:3;
+      left:26px;
+      right:26px;
+      bottom:24px;
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:20px;
+      transform:translateZ(28px);
+      transition:transform .55s var(--ease)
+    }
+
+    .project-card:hover .project-meta{
+      transform:translate3d(0,-7px,28px)
+    }
+
+    .project-meta b{
+      display:block;
+      font-family:Montserrat,sans-serif;
+      font-size:clamp(24px,2.3vw,38px);
+      font-weight:600
+    }
+
+    .project-meta small{
+      display:block;
+      margin-top:7px;
+      color:#9a958c;
+      font-size:7px;
+      letter-spacing:.2em;
+      text-transform:uppercase
+    }
+
+    .project-no{
+      font-family:Montserrat,sans-serif;
+      color:var(--gold2);
+      font-size:26px
+    }
+
+    .video-badge{
+      position:absolute;
+      z-index:4;
+      top:18px;
+      right:18px;
+      padding:9px 12px;
+      border:1px solid rgba(240,212,154,.22);
+      background:rgba(5,5,4,.5);
+      backdrop-filter:blur(10px);
+      font-size:7px;
+      letter-spacing:.18em;
+      color:#c8b98f
+    }
+
+    .immersive{
+      background:
+        radial-gradient(
+          circle at 50% 24%,
+          rgba(214,177,106,.085),
+          transparent 36%
+        ),
+        #060605
+    }
+
+    .pano-wrap{
+      position:relative;
+      height:700px;
+      border:1px solid rgba(214,177,106,.25);
+      overflow:hidden;
+      background-image:
+        linear-gradient(
+          rgba(5,5,4,.18),
+          rgba(5,5,4,.18)
+        ),
+        url('./images/panorama-360.jpg');
+      background-size:cover;
+      background-position:center;
+      box-shadow:0 45px 120px rgba(0,0,0,.48)
+    }
+
+    .pano-wrap:before{
+      content:"";
+      position:absolute;
+      z-index:4;
+      inset:0;
+      pointer-events:none;
+      box-shadow:inset 0 0 110px rgba(0,0,0,.42)
+    }
+
+    #panorama360{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:1
+    }
+
+    .pano-fallback{
+      position:absolute;
+      inset:0;
+      z-index:0;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:40px;
+      background:
+        linear-gradient(
+          90deg,
+          transparent 49.8%,
+          rgba(255,255,255,.03) 50%,
+          transparent 50.2%
+        ),
+        linear-gradient(
+          0deg,
+          transparent 49.8%,
+          rgba(255,255,255,.03) 50%,
+          transparent 50.2%
+        )
+    }
+
+    .pano-fallback strong{
+      font-family:Montserrat,sans-serif;
+      font-size:46px;
+      font-weight:600
+    }
+
+    .pano-fallback span{
+      display:block;
+      margin-top:12px;
+      color:#8e8980;
+      font-size:8px;
+      letter-spacing:.2em
+    }
+
+    .pano-hud{
+      position:absolute;
+      z-index:5;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      padding:11px 16px;
+      border:1px solid rgba(214,177,106,.3);
+      background:rgba(6,6,5,.64);
+      backdrop-filter:blur(12px);
+      font-size:7px;
+      letter-spacing:.2em;
+      color:var(--gold2);
+      pointer-events:none
+    }
+
+    .team{
+      background:
+        linear-gradient(
+          180deg,
+          #070706,
+          #0a0907
+        )
+    }
+
+    .team-title{
+      line-height:1.08;
+      max-width:1040px
+    }
+
+    .team-title .team-line,
+    .team-title .gold{
+      display:block
+    }
+
+    .team-title .gold{
+      margin-top:.22em;
+      white-space:nowrap
+    }
+
+    .team-title .team-line{
+      background-image:
+        linear-gradient(
+          105deg,
+          #f7f4ed 0%,
+          #fffdf8 20%,
+          #d9c9a7 36%,
+          #fff 50%,
+          #d8b873 62%,
+          #f8f4eb 78%,
+          #fff 100%
+        );
+      background-size:320% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation:luxTextFlow 10s ease-in-out infinite
+    }
+
+    .team-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px
+    }
+
+    .person{
+      position:relative;
+      background:var(--panel);
+      border:1px solid rgba(255,255,255,.07);
+      overflow:hidden;
+      transition:.5s var(--ease);
+      transform-style:preserve-3d
+    }
+
+    .person:hover{
+      border-color:rgba(240,212,154,.25);
+      transform:translateY(-8px)
+    }
+
+    .person-media{
+      position:relative;
+      aspect-ratio:4/5;
+      background:
+        linear-gradient(
+          150deg,
+          #191712,
+          #090807
+        );
+      overflow:hidden
+    }
+
+    .person-media:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(
+          circle at 50% 32%,
+          rgba(240,212,154,.14),
+          transparent 28%
+        )
+    }
+
+    .person-media img{
+      position:relative;
+      z-index:1;
+      height:100%;
+      object-fit:cover;
+      filter:saturate(.72) contrast(1.03);
+      transition:.85s var(--ease)
+    }
+
+    .person:hover img{
+      transform:scale(1.045);
+      filter:saturate(.9)
+    }
+
+    .person-media:after{
+      content:"";
+      position:absolute;
+      z-index:2;
+      inset:0;
+      background:
+        linear-gradient(
+          180deg,
+          transparent 52%,
+          rgba(6,6,5,.82)
+        )
+    }
+
+    .person-info{
+      position:relative;
+      padding:25px 24px 29px
+    }
+
+    .role{
+      font-size:7px;
+      letter-spacing:.24em;
+      color:var(--gold2);
+      text-transform:uppercase
+    }
+
+    .person h3{
+      font-family:Montserrat,sans-serif;
+      font-size:28px;
+      font-weight:600;
+      margin:9px 0 0
+    }
+
+    .contact{
+      padding:170px 0 125px;
+      background:
+        radial-gradient(
+          circle at 50% 46%,
+          rgba(214,177,106,.095),
+          transparent 40%
+        ),
+        #060605;
+      text-align:center;
+      overflow:hidden;
+      position:relative
+    }
+
+    .contact:before{
+      content:"";
+      position:absolute;
+      width:880px;
+      height:880px;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-47%);
+      border:1px solid rgba(240,212,154,.055);
+      border-radius:50%;
+      box-shadow:0 0 140px rgba(214,177,106,.03)
+    }
+
+    .contact-title{
+      position:relative;
+      font-family:Montserrat,sans-serif;
+      font-size:clamp(42px,6.4vw,102px);
+      line-height:1.12;
+      font-weight:650;
+      letter-spacing:-.04em;
+      margin:24px auto 50px;
+      max-width:1380px
+    }
+
+    .contact-title .contact-line{
+      display:block;
+      background-size:320% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation:luxTextFlow 10s ease-in-out infinite
+    }
+
+    .contact-title .contact-line:first-child{
+      background-image:
+        linear-gradient(
+          105deg,
+          #f7f4ed 0%,
+          #fffdf8 20%,
+          #d9c9a7 36%,
+          #fff 50%,
+          #d8b873 62%,
+          #f8f4eb 78%,
+          #fff 100%
+        )
+    }
+
+    .contact-title .contact-line+.contact-line{
+      margin-top:.22em
+    }
+
+    .contact p{
+      position:relative;
+      max-width:760px;
+      margin:0 auto 38px;
+      color:#99948a;
+      line-height:1.95;
+      font-size:12px
+    }
+
+    .contact-links{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      max-width:980px;
+      margin:50px auto 0
+    }
+
+    .contact-link{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:18px;
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.02);
+      text-align:left;
+      transition:.4s var(--ease);
+      --sx:50%;
+      --sy:50%;
+      overflow:hidden;
+      position:relative
+    }
+
+    .contact-link:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(
+          280px circle at var(--sx) var(--sy),
+          rgba(240,212,154,.13),
+          transparent 50%
+        );
+      opacity:0;
+      transition:.3s;
+      pointer-events:none
+    }
+
+    .contact-link:hover:before{opacity:1}
+
+    .contact-link:hover{
+      transform:translateY(-4px);
+      border-color:rgba(240,212,154,.3);
+      background:rgba(240,212,154,.035)
+    }
+
+    .contact-link b{
+      display:block;
+      font-size:9px;
+      letter-spacing:.15em;
+      text-transform:uppercase
+    }
+
+    .contact-link small{
+      display:block;
+      margin-top:5px;
+      color:#7f796f;
+      font-size:8px
+    }
+
+    .brand-icon{
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:#f3f2ee;
+      color:#111;
+      box-shadow:0 10px 30px rgba(0,0,0,.2)
+    }
+
+    .brand-icon svg{
+      width:23px;
+      height:23px
+    }
+
+    .brand-icon.tiktok{background:#0b0b0b}
+
+    .brand-icon.zalo{
+      background:#fff;
+      color:#1167d8;
+      font:800 10px/1 Arial,sans-serif;
+      letter-spacing:-.04em
+    }
+
+    .brand-icon.facebook{
+      background:#f3f2ee;
+      color:#1677f2
+    }
+
+    .policy-note{
+      position:relative;
+      margin:28px auto 0;
+      color:#625e57;
+      font-size:7px;
+      letter-spacing:.14em;
+      text-transform:uppercase
+    }
+
+    footer{
+      position:relative;
+      z-index:3;
+      padding:30px 0 44px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color:#6d6962;
+      font-size:7px;
+      letter-spacing:.16em;
+      text-transform:uppercase
+    }
+
+    .footer-social{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:64px;
+      margin:0 auto 34px;
+      flex-wrap:wrap
+    }
+
+    .footer-social a{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      min-width:72px;
+      color:#8e897f;
+      transition:.4s var(--ease)
+    }
+
+    .footer-social a:hover{
+      color:var(--gold2);
+      transform:translateY(-5px)
+    }
+
+    .footer-social .brand-icon{
+      width:44px;
+      height:44px
+    }
+
+    .footer-social .brand-icon svg{
+      width:28px;
+      height:28px
+    }
+
+    .footer-social .brand-icon.zalo{
+      font-size:12px
+    }
+
+    .footer-row{
+      display:flex;
+      justify-content:space-between;
+      gap:30px;
+      flex-wrap:wrap
+    }
+
+    .sound{
+      position:fixed;
+      right:28px;
+      bottom:28px;
+      z-index:9600;
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      border:1px solid rgba(214,177,106,.5);
+      background:rgba(6,6,5,.72);
+      backdrop-filter:blur(12px);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      transition:.4s var(--ease);
+      box-shadow:0 10px 40px rgba(0,0,0,.3)
+    }
+
+    .sound:hover{
+      transform:scale(1.07);
+      border-color:var(--gold2)
+    }
+
+    .sound-label{
+      position:absolute;
+      right:72px;
+      white-space:nowrap;
+      font-size:7px;
+      letter-spacing:.2em;
+      color:#77736c;
+      text-transform:uppercase
+    }
+
+    .eq{
+      height:16px;
+      display:flex;
+      align-items:center;
+      gap:2px
+    }
+
+    .eq i{
+      display:block;
+      width:2px;
+      height:5px;
+      background:var(--gold2);
+      transform-origin:bottom
+    }
+
+    .sound.playing .eq i:nth-child(1){
+      animation:eq .65s infinite alternate
+    }
+
+    .sound.playing .eq i:nth-child(2){
+      animation:eq .48s .1s infinite alternate
+    }
+
+    .sound.playing .eq i:nth-child(3){
+      animation:eq .7s .2s infinite alternate
+    }
+
+    .sound.playing .eq i:nth-child(4){
+      animation:eq .52s .05s infinite alternate
+    }
+
+    @keyframes loaderLine{
+      from{transform:translateX(-130%)}
+      to{transform:translateX(300%)}
+    }
+
+    @keyframes heroBreath{
+      from{transform:scale(1.01)}
+      to{transform:scale(1.07)}
+    }
+
+    @keyframes sweep{
+      0%,20%{left:-40%;opacity:0}
+      45%{opacity:1}
+      75%,100%{left:120%;opacity:0}
+    }
+
+    @keyframes titleUp{
+      to{transform:none}
+    }
+
+    @keyframes marquee{
+      to{transform:translateX(-50%)}
+    }
+
+    @keyframes luxTextFlow{
+      0%{
+        background-position:0% 50%;
+        filter:brightness(.96)
+      }
+      45%{
+        background-position:100% 50%;
+        filter:brightness(1.08)
+      }
+      100%{
+        background-position:0% 50%;
+        filter:brightness(.96)
       }
     }
 
-    // 360 viewer
-    (async()=>{try{const imgUrl='./images/panorama-360.jpg';const r=await fetch(imgUrl,{method:'HEAD',cache:'no-store'});if(!r.ok||typeof pannellum==='undefined')return;$('#panoFallback').style.display='none';pannellum.viewer('panorama360',{type:'equirectangular',panorama:imgUrl,autoLoad:true,showControls:true,showFullscreenCtrl:true,showZoomCtrl:true,mouseZoom:true,draggable:true,pitch:0,yaw:0,hfov:100,minHfov:50,maxHfov:120,autoRotate:-.8,autoRotateInactivityDelay:3800,compass:false})}catch(e){}})();
+    @keyframes goldFlow{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
 
-    // subtle ambient gold particles, disabled for reduced motion
-    if(!reduce){const c=$('#ambient'),ctx=c.getContext('2d');let w,h,dpr,pts=[];function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;c.style.width=w+'px';c.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);pts=Array.from({length:Math.min(48,Math.floor(w/32))},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.15+.25,v:Math.random()*.14+.035,a:Math.random()*.32+.05}))}function draw(){ctx.clearRect(0,0,w,h);for(const p of pts){p.y-=p.v;if(p.y<-4){p.y=h+4;p.x=Math.random()*w}ctx.beginPath();ctx.fillStyle=`rgba(240,212,154,${p.a})`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}requestAnimationFrame(draw)}addEventListener('resize',resize);resize();draw()}
+    @keyframes eyebrowPulse{
+      0%,100%{
+        opacity:.72;
+        text-shadow:0 0 0 rgba(240,212,154,0)
+      }
+      50%{
+        opacity:1;
+        text-shadow:0 0 16px rgba(240,212,154,.16)
+      }
+    }
+
+    @keyframes eq{
+      to{height:16px}
+    }
+
+    @media(max-width:1050px){
+      .shell{
+        width:min(var(--max),calc(100% - 38px))
+      }
+
+      header{height:72px}
+      .nav{height:72px}
+      header nav{display:none}
+      .menu-btn{display:block}
+
+      .hero-content{padding-top:145px}
+
+      .hero-grid,
+      .section-head,
+      .story-layout{
+        grid-template-columns:1fr
+      }
+
+      .hero-side{max-width:620px}
+
+      .hero-tags{
+        grid-template-columns:repeat(2,1fr)
+      }
+
+      .hero-tag:nth-child(2){
+        border-right:0
+      }
+
+      .hero-tag:nth-child(-n+2){
+        border-bottom:1px solid rgba(255,255,255,.07)
+      }
+
+      .section{padding:110px 0}
+
+      .section-head{gap:28px}
+      .section-desc{justify-self:start}
+
+      .story-copy{
+        position:relative;
+        top:auto;
+        padding-bottom:20px
+      }
+
+      .story-media,
+      .story-media.tall{
+        min-height:560px
+      }
+
+      .project-card:nth-child(n){
+        grid-column:span 6;
+        aspect-ratio:16/10;
+        margin:0
+      }
+
+      .project-card:nth-child(3){
+        grid-column:3/span 8
+      }
+
+      .team-grid{
+        grid-template-columns:1fr 1fr
+      }
+
+      .person:last-child{
+        grid-column:1/-1
+      }
+
+      .pano-wrap{height:560px}
+
+      .contact-links{
+        grid-template-columns:repeat(2,1fr)
+      }
+
+      .contact-link:last-child{
+        grid-column:1/-1
+      }
+    }
+
+    @media(max-width:680px){
+      .shell{width:calc(100% - 26px)}
+
+      .cursor-dot,
+      .cursor-ring,
+      .mouse-glow{
+        display:none
+      }
+
+      .hero h1{
+        font-size:62px;
+        line-height:.94;
+        letter-spacing:-.045em
+      }
+
+      .hero-copy{font-size:11px}
+
+      .hero-tags{margin-top:52px}
+
+      .hero-tag{
+        padding:18px 16px
+      }
+
+      .hero-tag b{
+        font-size:18px
+      }
+
+      .scroll-cue{display:none}
+
+      .section{padding:88px 0}
+
+      .section-title{
+        font-size:44px;
+        line-height:1.1
+      }
+
+      .story-title{
+        font-size:46px;
+        line-height:1.14
+      }
+
+      .story-media,
+      .story-media.tall{
+        min-height:430px
+      }
+
+      .project-grid{
+        display:grid;
+        grid-template-columns:1fr
+      }
+
+      .project-card:nth-child(n){
+        grid-column:auto;
+        aspect-ratio:16/10
+      }
+
+      .pano-wrap{height:440px}
+
+      .pano-fallback strong{
+        font-size:32px
+      }
+
+      .team-grid{
+        grid-template-columns:1fr
+      }
+
+      .person:last-child{
+        grid-column:auto
+      }
+
+      .contact{
+        padding:115px 0 95px
+      }
+
+      .contact-title{
+        font-size:clamp(30px,9vw,46px);
+        line-height:1.08
+      }
+
+      .contact-links{
+        grid-template-columns:1fr
+      }
+
+      .contact-link:last-child{
+        grid-column:auto
+      }
+
+      .sound{
+        right:16px;
+        bottom:16px;
+        width:54px;
+        height:54px
+      }
+
+      .sound-label{display:none}
+
+      .marquee span{
+        font-size:14px;
+        letter-spacing:.11em
+      }
+
+      .marquee-track{
+        animation-duration:16s
+      }
+
+      .footer-social{
+        gap:24px
+      }
+
+      .team-title .gold{
+        white-space:normal
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      *,
+      *:before,
+      *:after{
+        animation-duration:.001ms!important;
+        animation-iteration-count:1!important;
+        scroll-behavior:auto!important
+      }
+
+      .reveal,
+      .clip{
+        opacity:1!important;
+        transform:none!important;
+        clip-path:none!important;
+        filter:none!important
+      }
+    }
+  </style>
+</head>
+
+<body class="loading">
+
+  <canvas id="ambient"></canvas>
+  <div class="mouse-glow"></div>
+  <div class="noise"></div>
+  <div id="progress"></div>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <div class="loader" id="loader">
+    <div class="loader-box">
+      <div class="loader-logo">HUY<span>DJI</span></div>
+      <div class="loader-sub">Cinematic Visual Portfolio</div>
+      <div class="loader-line"><i></i></div>
+    </div>
+  </div>
+
+  <header id="header">
+    <div class="shell nav">
+
+      <a class="brand magnetic" href="#top">
+        <strong>HUY<span>DJI</span></strong>
+        <small>Premium Media</small>
+      </a>
+
+      <nav>
+        <a href="#story">Giới thiệu</a>
+        <a href="#projects">Dự án</a>
+        <a href="#view360">360°</a>
+        <a href="#team">Đội ngũ</a>
+        <a href="#contact">Liên hệ</a>
+      </nav>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Mở menu">
+        <span></span>
+      </button>
+
+    </div>
+  </header>
+
+  <div class="mobile-panel" id="mobilePanel">
+    <nav>
+      <a href="#story">Giới thiệu</a>
+      <a href="#projects">Dự án</a>
+      <a href="#view360">360°</a>
+      <a href="#team">Đội ngũ</a>
+      <a href="#contact">Liên hệ</a>
+    </nav>
+  </div>
+
+  <main id="top">
+
+    <section class="hero">
+
+      <div class="hero-fallback"></div>
+
+      <video
+        class="hero-video parallax"
+        data-speed="-0.05"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="./images/media-bg.jpg"
+      >
+        <source src="./videos/hero.mp4" type="video/mp4">
+      </video>
+
+      <div class="hero-overlay"></div>
+      <div class="hero-orbit parallax" data-speed="0.025"></div>
+      <div class="light-sweep"></div>
+
+      <div class="shell hero-content">
+
+        <div class="hero-grid">
+
+          <div>
+
+            <div class="eyebrow reveal">
+              Cinematic · Real Estate · Events · Flycam · 360°
+            </div>
+
+            <h1>
+              <span class="line">
+                <i>HUYDJI</i>
+              </span>
+
+              <span class="line">
+                <i>MEDIA</i>
+              </span>
+            </h1>
+
+            <p class="hero-copy reveal">
+              Một không gian giới thiệu hình ảnh và dấu ấn thị giác của HUYDJI MEDIA,
+              nơi điện ảnh, kiến trúc, chuyển động và công nghệ được kết nối
+              trong cùng một ngôn ngữ hình ảnh.
+            </p>
+
+          </div>
+
+          <div class="hero-side reveal">
+
+            <p>
+              Tầm nhìn kiến tạo
+              <span class="gold">không gian.</span>
+              <br>
+
+              Hình ảnh nâng tầm
+              <span class="gold">giá trị.</span>
+            </p>
+
+            <div class="cta-row">
+
+              <a class="btn primary magnetic" href="#projects">
+                Xem dự án
+                <span>→</span>
+              </a>
+
+              <a class="btn magnetic" href="#contact">
+                Thông tin liên hệ
+                <span>↗</span>
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="hero-tags reveal">
+
+          <div class="hero-tag">
+            <b>Cinematic</b>
+            <small>Visual Direction</small>
+          </div>
+
+          <div class="hero-tag">
+            <b>Real Estate</b>
+            <small>Architecture Visual</small>
+          </div>
+
+          <div class="hero-tag">
+            <b>Flycam</b>
+            <small>Aerial Perspective</small>
+          </div>
+
+          <div class="hero-tag">
+            <b>360°</b>
+            <small>Immersive Space</small>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="scroll-cue">
+        <span>Scroll to explore</span>
+        <i></i>
+      </div>
+
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+
+      <div class="marquee-track">
+
+        <div class="marquee-group">
+          <span>
+            <b>HUYDJI MEDIA</b>
+            · CINEMATIC
+            · REAL ESTATE
+            · FLYCAM
+            · EVENT
+            · 360° IMMERSIVE
+            · VISUAL DIRECTION · &nbsp;
+          </span>
+        </div>
+
+        <div class="marquee-group">
+          <span>
+            <b>HUYDJI MEDIA</b>
+            · CINEMATIC
+            · REAL ESTATE
+            · FLYCAM
+            · EVENT
+            · 360° IMMERSIVE
+            · VISUAL DIRECTION · &nbsp;
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <section class="section story" id="story">
+
+      <div class="shell story-layout">
+
+        <div class="story-copy reveal">
+
+          <div class="eyebrow">
+            Architecture · Resort · Real Estate
+          </div>
+
+          <h2 class="story-title">
+
+            <span>
+              Không gian được kể bằng
+            </span>
+
+            <span class="gold">
+              điện ảnh.
+            </span>
+
+          </h2>
+
+          <p>
+            Từng khung hình được tổ chức bằng ánh sáng, chiều sâu,
+            nhịp chuyển động và tỷ lệ không gian, giúp kiến trúc
+            và bất động sản có một ngôn ngữ thị giác nhất quán,
+            tinh gọn và cao cấp.
+          </p>
+
+          <div class="cta-row" style="margin-top:30px">
+
+            <a class="btn magnetic" href="#view360">
+              Khám phá 360°
+              <span>→</span>
+            </a>
+
+          </div>
+
+        </div>
+
+        <div class="story-stack">
+
+          <div class="story-media clip">
+
+            <img
+              src="./images/villa.jpg"
+              alt="Villa và bất động sản"
+            >
+
+            <div class="story-index">
+              01 · REAL ESTATE
+            </div>
+
+          </div>
+
+          <div class="story-media tall clip">
+
+            <img
+              src="./images/media-bg.jpg"
+              alt="HUYDJI Media Production"
+            >
+
+            <div class="story-index">
+              02 · CINEMATIC
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="section projects" id="projects">
+
+      <div class="shell">
+
+        <div class="section-head">
+
+          <div class="reveal">
+
+            <div class="eyebrow">
+              Selected Visuals
+            </div>
+
+            <h2 class="section-title">
+              Dự án
+              <span class="gold">nổi bật.</span>
+            </h2>
+
+          </div>
+
+          <p class="section-desc reveal">
+            Ba khung video ngang giữ nguyên tên file.
+            Khi bạn thêm MP4 đúng đường dẫn,
+            website sẽ sử dụng video.
+            Khi chưa có video, poster ảnh vẫn hiển thị.
+          </p>
+
+        </div>
+
+        <div class="project-grid">
+
+          <article class="project-card reveal tilt">
+
+            <video
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster="./images/wedding.jpg"
+            >
+              <source
+                src="./videos/project-01.mp4"
+                type="video/mp4"
+              >
+            </video>
+
+            <div class="video-badge">
+              PROJECT 01
+            </div>
+
+            <div class="project-meta">
+
+              <div>
+                <b>Wedding & Event</b>
+                <small>Cinematic Production</small>
+              </div>
+
+              <span class="project-no">
+                01
+              </span>
+
+            </div>
+
+          </article>
+
+          <article class="project-card reveal tilt">
+
+            <video
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster="./images/stage.jpg"
+            >
+              <source
+                src="./videos/project-02.mp4"
+                type="video/mp4"
+              >
+            </video>
+
+            <div class="video-badge">
+              PROJECT 02
+            </div>
+
+            <div class="project-meta">
+
+              <div>
+                <b>Stage & Concert</b>
+                <small>Live Visual Production</small>
+              </div>
+
+              <span class="project-no">
+                02
+              </span>
+
+            </div>
+
+          </article>
+
+          <article class="project-card reveal tilt">
+
+            <video
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster="./images/media-bg.jpg"
+            >
+              <source
+                src="./videos/project-03.mp4"
+                type="video/mp4"
+              >
+            </video>
+
+            <div class="video-badge">
+              PROJECT 03
+            </div>
+
+            <div class="project-meta">
+
+              <div>
+                <b>Commercial & Flycam</b>
+                <small>Premium Media</small>
+              </div>
+
+              <span class="project-no">
+                03
+              </span>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="section immersive" id="view360">
+
+      <div class="shell">
+
+        <div class="section-head">
+
+          <div class="reveal">
+
+            <div class="eyebrow">
+              Immersive Experience
+            </div>
+
+            <h2 class="section-title">
+              Không gian
+              <span class="gold">360°.</span>
+            </h2>
+
+          </div>
+
+          <p class="section-desc reveal">
+            Kéo để xoay, cuộn để zoom và mở toàn màn hình.
+            Viewer sử dụng file
+            <b>images/panorama-360.jpg</b>.
+          </p>
+
+        </div>
+
+        <div class="pano-wrap reveal">
+
+          <div
+            class="pano-fallback"
+            id="panoFallback"
+          >
+
+            <div>
+              <strong>360°</strong>
+              <span>Đang tải không gian toàn cảnh</span>
+            </div>
+
+          </div>
+
+          <div id="panorama360"></div>
+
+          <div class="pano-hud">
+            KÉO ĐỂ KHÁM PHÁ 360°
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="section team" id="team">
+
+      <div class="shell">
+
+        <div class="section-head">
+
+          <div class="reveal">
+
+            <div class="eyebrow">
+              Media Network
+            </div>
+
+            <h2 class="section-title team-title">
+
+              <span class="team-line">
+                Đội ngũ hợp tác
+              </span>
+
+              <span class="gold">
+                chiến lược.
+              </span>
+
+            </h2>
+
+          </div>
+
+          <p class="section-desc reveal">
+            Hình ảnh đội ngũ được trình bày theo phong cách editorial,
+            tập trung vào vai trò sáng tạo và cộng tác
+            trong hệ sinh thái HUYDJI MEDIA.
+          </p>
+
+        </div>
+
+        <div class="team-grid">
+
+          <article class="person reveal tilt">
+
+            <div class="person-media">
+
+              <img
+                src="./director/director-01.png"
+                alt="Phạm Quốc Huy"
+              >
+
+            </div>
+
+            <div class="person-info">
+
+              <div class="role">
+                Nhà sáng tạo
+              </div>
+
+              <h3>
+                Phạm Quốc Huy
+              </h3>
+
+            </div>
+
+          </article>
+
+          <article class="person reveal tilt">
+
+            <div class="person-media">
+
+              <img
+                src="./director/director-02.png"
+                alt="Hợp tác chiến lược Media"
+              >
+
+            </div>
+
+            <div class="person-info">
+
+              <div class="role">
+                Hợp tác chiến lược
+              </div>
+
+              <h3>
+                Media
+              </h3>
+
+            </div>
+
+          </article>
+
+          <article class="person reveal tilt">
+
+            <div class="person-media">
+
+              <img
+                src="./director/director-03.png"
+                alt="Team HUY DJI"
+              >
+
+            </div>
+
+            <div class="person-info">
+
+              <div class="role">
+                Media Team
+              </div>
+
+              <h3>
+                Team HUY DJI
+              </h3>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="contact" id="contact">
+
+      <div class="shell">
+
+        <div class="eyebrow reveal">
+          HUYDJI MEDIA · VISUAL PORTFOLIO
+        </div>
+
+        <h2 class="contact-title reveal">
+
+          <span class="contact-line">
+            KIẾN TẠO GIÁ TRỊ
+          </span>
+
+          <span class="contact-line gold">
+            ĐỊNH HÌNH TƯƠNG LAI.
+          </span>
+
+        </h2>
+
+        <p class="reveal">
+          Bất động sản · Kiến trúc · Resort · Villa · Flycam
+          · 360° Immersive · Premium Media.
+          Không gian giới thiệu hình ảnh, dự án,
+          trải nghiệm thị giác và thông tin liên hệ
+          của HUYDJI MEDIA.
+        </p>
+
+        <div class="contact-links reveal">
+
+          <a
+            class="contact-link magnetic"
+            href="https://zalo.me/0337046094"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <span class="brand-icon zalo">
+              Zalo
+            </span>
+
+            <div>
+              <b>Zalo</b>
+              <small>0337046094</small>
+            </div>
+
+          </a>
+
+          <a
+            class="contact-link magnetic"
+            href="https://www.tiktok.com/@huydjimini2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <span class="brand-icon tiktok">
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path
+                  fill="#25F4EE"
+                  d="M9.3 8.4v7a2.8 2.8 0 1 1-2-2.7v-2.8a5.6 5.6 0 1 0 4.8 5.5V8.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.6-.1-4.5-1.8-4.8-4.1H9.3v4.9Z"
+                />
+
+                <path
+                  fill="#FE2C55"
+                  d="M10.4 7.4v7a2.8 2.8 0 1 1-2-2.7v2.1a2.8 2.8 0 0 0 4-2.5V7.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.3-.2-3.9-1.6-4.4-3.6h-2.3v3.4Z"
+                />
+
+                <path
+                  fill="#fff"
+                  d="M10.4 7.4v6.7a2.8 2.8 0 1 1-2-2.7v2a2.8 2.8 0 0 0 4-2.5V7.9c1.1.8 2.4 1.3 3.9 1.4V7.6c-2-.3-3.4-1.5-3.9-3.2h-2v3Z"
+                />
+
+              </svg>
+
+            </span>
+
+            <div>
+              <b>TikTok</b>
+              <small>@huydjimini2</small>
+            </div>
+
+          </a>
+
+          <a
+            class="contact-link magnetic"
+            href="https://www.facebook.com/share/1CxT2uHXdv/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            <span class="brand-icon facebook">
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path
+                  fill="currentColor"
+                  d="M13.7 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V4a22 22 0 0 0-2.4-.1c-2.4 0-4.1 1.5-4.1 4.2V10H8v3h2.5v8h3.2Z"
+                />
+
+              </svg>
+
+            </span>
+
+            <div>
+              <b>Facebook</b>
+              <small>HUYDJI MEDIA</small>
+            </div>
+
+          </a>
+
+        </div>
+
+        <div class="policy-note reveal">
+          Portfolio · Image showcase · Contact information only
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+
+    <div class="shell">
+
+      <div class="footer-social">
+
+        <a
+          class="magnetic"
+          href="https://zalo.me/0337046094"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span class="brand-icon zalo">
+            Zalo
+          </span>
+
+          <span>Zalo</span>
+
+        </a>
+
+        <a
+          class="magnetic"
+          href="https://www.tiktok.com/@huydjimini2"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span class="brand-icon tiktok">
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <path
+                fill="#25F4EE"
+                d="M9.3 8.4v7a2.8 2.8 0 1 1-2-2.7v-2.8a5.6 5.6 0 1 0 4.8 5.5V8.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.6-.1-4.5-1.8-4.8-4.1H9.3v4.9Z"
+              />
+
+              <path
+                fill="#FE2C55"
+                d="M10.4 7.4v7a2.8 2.8 0 1 1-2-2.7v2.1a2.8 2.8 0 0 0 4-2.5V7.9c1.3.9 2.9 1.5 4.7 1.5V7.6c-2.3-.2-3.9-1.6-4.4-3.6h-2.3v3.4Z"
+              />
+
+              <path
+                fill="#fff"
+                d="M10.4 7.4v6.7a2.8 2.8 0 1 1-2-2.7v2a2.8 2.8 0 0 0 4-2.5V7.9c1.1.8 2.4 1.3 3.9 1.4V7.6c-2-.3-3.4-1.5-3.9-3.2h-2v3Z"
+              />
+
+            </svg>
+
+          </span>
+
+          <span>TikTok</span>
+
+        </a>
+
+        <a
+          class="magnetic"
+          href="https://www.facebook.com/share/1CxT2uHXdv/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span class="brand-icon facebook">
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <path
+                fill="currentColor"
+                d="M13.7 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V4a22 22 0 0 0-2.4-.1c-2.4 0-4.1 1.5-4.1 4.2V10H8v3h2.5v8h3.2Z"
+              />
+
+            </svg>
+
+          </span>
+
+          <span>Facebook</span>
+
+        </a>
+
+      </div>
+
+      <div class="footer-row">
+
+        <span>
+          © 2026 HUYDJI MEDIA
+        </span>
+
+        <span>
+          Cinematic Visual Portfolio
+        </span>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+  <audio
+    id="bgMusic"
+    loop
+    preload="auto"
+  >
+    <source
+      src="./audio/bg-music.mp3"
+      type="audio/mpeg"
+    >
+  </audio>
+
+  <button
+    class="sound magnetic"
+    id="soundBtn"
+    aria-label="Bật hoặc tắt nhạc"
+  >
+
+    <span class="sound-label">
+      Sound off · click to play
+    </span>
+
+    <span class="eq">
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+    </span>
+
+  </button>
+
+  <script>
+    const $ = (s,scope=document) => scope.querySelector(s);
+    const $$ = (s,scope=document) => [...scope.querySelectorAll(s)];
+
+    const reduce =
+      matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+
+    window.addEventListener('load', () => {
+
+      setTimeout(() => {
+
+        $('#loader').classList.add('off');
+
+        document.body.classList.remove('loading');
+
+      },450);
+
+    });
+
+
+    const io =
+      new IntersectionObserver(
+        entries => {
+
+          entries.forEach(entry => {
+
+            if(entry.isIntersecting){
+
+              entry.target.classList.add('in');
+
+              io.unobserve(entry.target);
+
+            }
+
+          });
+
+        },
+        {
+          threshold:.1,
+          rootMargin:'0px 0px -7%'
+        }
+      );
+
+
+    $$('.reveal,.clip')
+      .forEach(el => io.observe(el));
+
+
+    let lastY = 0;
+
+    let ticking = false;
+
+
+    function scrollFx(){
+
+      if(ticking)return;
+
+      ticking = true;
+
+
+      requestAnimationFrame(() => {
+
+        const y = scrollY;
+
+        const max =
+          document.documentElement.scrollHeight
+          -
+          innerHeight;
+
+
+        $('#progress').style.width =
+          (max ? y / max * 100 : 0)
+          +
+          '%';
+
+
+        const header = $('#header');
+
+
+        header.classList.toggle(
+          'scrolled',
+          y > 40
+        );
+
+
+        header.classList.toggle(
+          'hide',
+          y > 180
+          &&
+          y > lastY + 3
+        );
+
+
+        lastY = y;
+
+
+        if(!reduce){
+
+          $$('.parallax')
+            .forEach(el => {
+
+              const r =
+                el.getBoundingClientRect();
+
+
+              const speed =
+                parseFloat(
+                  el.dataset.speed || 0
+                );
+
+
+              el.style.transform =
+                `translate3d(
+                  0,
+                  ${(innerHeight*.5-r.top)*speed}px,
+                  0
+                )`;
+
+            });
+
+        }
+
+
+        ticking = false;
+
+      });
+
+    }
+
+
+    addEventListener(
+      'scroll',
+      scrollFx,
+      {passive:true}
+    );
+
+
+    scrollFx();
+
+
+    if(
+      matchMedia('(pointer:fine)').matches
+    ){
+
+      document.body
+        .classList
+        .add('cursor-on');
+
+
+      const dot =
+        $('.cursor-dot');
+
+
+      const ring =
+        $('.cursor-ring');
+
+
+      let mx = 0;
+
+      let my = 0;
+
+      let rx = 0;
+
+      let ry = 0;
+
+
+      addEventListener(
+        'mousemove',
+        e => {
+
+          mx = e.clientX;
+
+          my = e.clientY;
+
+
+          dot.style.transform =
+            `translate(
+              ${mx}px,
+              ${my}px
+            )`;
+
+
+          document
+            .documentElement
+            .style
+            .setProperty(
+              '--mx',
+              mx + 'px'
+            );
+
+
+          document
+            .documentElement
+            .style
+            .setProperty(
+              '--my',
+              my + 'px'
+            );
+
+        }
+      );
+
+
+      (
+        function cursorLoop(){
+
+          rx += (mx-rx)*.16;
+
+          ry += (my-ry)*.16;
+
+
+          ring.style.transform =
+            `translate(
+              ${rx}px,
+              ${ry}px
+            )`;
+
+
+          requestAnimationFrame(
+            cursorLoop
+          );
+
+        }
+      )();
+
+
+      $$('a,button,.tilt')
+        .forEach(el => {
+
+          el.addEventListener(
+            'mouseenter',
+            () =>
+              document.body
+                .classList
+                .add('cursor-hover')
+          );
+
+
+          el.addEventListener(
+            'mouseleave',
+            () =>
+              document.body
+                .classList
+                .remove('cursor-hover')
+          );
+
+        });
+
+    }
+
+
+    if(
+      matchMedia('(pointer:fine)').matches
+      &&
+      !reduce
+    ){
+
+      $$('.magnetic')
+        .forEach(el => {
+
+          el.addEventListener(
+            'mousemove',
+            e => {
+
+              const r =
+                el.getBoundingClientRect();
+
+
+              const x =
+                e.clientX
+                -
+                r.left
+                -
+                r.width/2;
+
+
+              const y =
+                e.clientY
+                -
+                r.top
+                -
+                r.height/2;
+
+
+              el.style.transform =
+                `translate(
+                  ${x*.12}px,
+                  ${y*.12}px
+                )`;
+
+            }
+          );
+
+
+          el.addEventListener(
+            'mouseleave',
+            () =>
+              el.style.transform = ''
+          );
+
+        });
+
+
+      $$('.tilt')
+        .forEach(el => {
+
+          el.addEventListener(
+            'mousemove',
+            e => {
+
+              const r =
+                el.getBoundingClientRect();
+
+
+              const x =
+                (
+                  e.clientX
+                  -
+                  r.left
+                )
+                /
+                r.width
+                -
+                .5;
+
+
+              const y =
+                (
+                  e.clientY
+                  -
+                  r.top
+                )
+                /
+                r.height
+                -
+                .5;
+
+
+              el.style.transform =
+                `perspective(900px)
+                 rotateX(${-y*4}deg)
+                 rotateY(${x*5}deg)
+                 translateY(-3px)`;
+
+            }
+          );
+
+
+          el.addEventListener(
+            'mouseleave',
+            () =>
+              el.style.transform = ''
+          );
+
+        });
+
+
+      $$('.contact-link')
+        .forEach(el => {
+
+          el.addEventListener(
+            'mousemove',
+            e => {
+
+              const r =
+                el.getBoundingClientRect();
+
+
+              el.style.setProperty(
+                '--sx',
+                (
+                  (
+                    e.clientX
+                    -
+                    r.left
+                  )
+                  /
+                  r.width
+                  *
+                  100
+                ).toFixed(1)
+                +
+                '%'
+              );
+
+
+              el.style.setProperty(
+                '--sy',
+                (
+                  (
+                    e.clientY
+                    -
+                    r.top
+                  )
+                  /
+                  r.height
+                  *
+                  100
+                ).toFixed(1)
+                +
+                '%'
+              );
+
+            }
+          );
+
+        });
+
+    }
+
+
+    const menuBtn =
+      $('#menuBtn');
+
+
+    const mobilePanel =
+      $('#mobilePanel');
+
+
+    menuBtn.addEventListener(
+      'click',
+      () =>
+        mobilePanel
+          .classList
+          .toggle('open')
+    );
+
+
+    $$('a',mobilePanel)
+      .forEach(a => {
+
+        a.addEventListener(
+          'click',
+          () =>
+            mobilePanel
+              .classList
+              .remove('open')
+        );
+
+      });
+
+
+    $$('.project-card')
+      .forEach(card => {
+
+        const v =
+          $('video',card);
+
+
+        if(!v)return;
+
+
+        card.addEventListener(
+          'mouseenter',
+          () =>
+            v.play()
+             .catch(()=>{})
+        );
+
+
+        card.addEventListener(
+          'mouseleave',
+          () => {
+
+            v.pause();
+
+
+            try{
+
+              v.currentTime = 0;
+
+            }
+            catch(e){}
+
+          }
+        );
+
+      });
+
+
+    const music =
+      $('#bgMusic');
+
+
+    const soundBtn =
+      $('#soundBtn');
+
+
+    const soundLabel =
+      $('.sound-label',soundBtn);
+
+
+    music.volume = .22;
+
+
+    function soundState(on){
+
+      soundBtn
+        .classList
+        .toggle(
+          'playing',
+          on
+        );
+
+
+      soundLabel.textContent =
+        on
+        ?
+        'Sound on · click to mute'
+        :
+        'Sound off · click to play';
+
+    }
+
+
+    async function startMusic(){
+
+      if(!music.paused){
+
+        soundState(true);
+
+        return true;
+
+      }
+
+
+      try{
+
+        await music.play();
+
+        soundState(true);
+
+        return true;
+
+      }
+      catch(e){
+
+        soundState(false);
+
+        return false;
+
+      }
+
+    }
+
+
+    soundBtn.addEventListener(
+      'click',
+      e => {
+
+        e.stopPropagation();
+
+
+        if(music.paused){
+
+          startMusic();
+
+        }
+        else{
+
+          music.pause();
+
+          soundState(false);
+
+        }
+
+      }
+    );
+
+
+    setTimeout(
+      () =>
+        startMusic(),
+      800
+    );
+
+
+    function unlockMusic(e){
+
+      if(
+        e.target
+        ?.
+        closest
+        ?.
+        ('#soundBtn')
+      ){
+        return;
+      }
+
+
+      startMusic();
+
+
+      document.removeEventListener(
+        'pointerdown',
+        unlockMusic
+      );
+
+
+      document.removeEventListener(
+        'touchstart',
+        unlockMusic
+      );
+
+
+      document.removeEventListener(
+        'keydown',
+        unlockMusic
+      );
+
+    }
+
+
+    document.addEventListener(
+      'pointerdown',
+      unlockMusic,
+      {passive:true}
+    );
+
+
+    document.addEventListener(
+      'touchstart',
+      unlockMusic,
+      {passive:true}
+    );
+
+
+    document.addEventListener(
+      'keydown',
+      unlockMusic
+    );
+
+
+    music.addEventListener(
+      'error',
+      () => {
+
+        soundLabel.textContent =
+          'Music file missing';
+
+
+        soundBtn
+          .classList
+          .remove('playing');
+
+      }
+    );
+
+
+    (
+      function init360(){
+
+        if(
+          typeof pannellum
+          ===
+          'undefined'
+        ){
+          return;
+        }
+
+
+        const image =
+          './images/panorama-360.jpg';
+
+
+        const test =
+          new Image();
+
+
+        test.onload =
+          () => {
+
+            $('#panoFallback')
+              .style
+              .display =
+              'none';
+
+
+            pannellum.viewer(
+              'panorama360',
+              {
+
+                type:
+                  'equirectangular',
+
+                panorama:
+                  image,
+
+                autoLoad:
+                  true,
+
+                showControls:
+                  true,
+
+                showFullscreenCtrl:
+                  true,
+
+                showZoomCtrl:
+                  true,
+
+                mouseZoom:
+                  true,
+
+                draggable:
+                  true,
+
+                pitch:
+                  0,
+
+                yaw:
+                  0,
+
+                hfov:
+                  100,
+
+                minHfov:
+                  50,
+
+                maxHfov:
+                  120,
+
+                autoRotate:
+                  -.8,
+
+                autoRotateInactivityDelay:
+                  3800,
+
+                compass:
+                  false
+
+              }
+            );
+
+          };
+
+
+        test.src =
+          image;
+
+      }
+    )();
+
+
+    if(!reduce){
+
+      const canvas =
+        $('#ambient');
+
+
+      const ctx =
+        canvas.getContext('2d');
+
+
+      let w = 0;
+
+      let h = 0;
+
+      let dpr = 1;
+
+      let pts = [];
+
+
+      function resize(){
+
+        dpr =
+          Math.min(
+            devicePixelRatio || 1,
+            2
+          );
+
+
+        w =
+          innerWidth;
+
+
+        h =
+          innerHeight;
+
+
+        canvas.width =
+          w * dpr;
+
+
+        canvas.height =
+          h * dpr;
+
+
+        canvas.style.width =
+          w + 'px';
+
+
+        canvas.style.height =
+          h + 'px';
+
+
+        ctx.setTransform(
+          dpr,
+          0,
+          0,
+          dpr,
+          0,
+          0
+        );
+
+
+        pts =
+          Array.from(
+            {
+              length:
+                Math.min(
+                  48,
+                  Math.floor(w/32)
+                )
+            },
+            () => ({
+              x:
+                Math.random()*w,
+
+              y:
+                Math.random()*h,
+
+              r:
+                Math.random()*1.1
+                +
+                .25,
+
+              v:
+                Math.random()*.14
+                +
+                .035,
+
+              a:
+                Math.random()*.28
+                +
+                .05
+            })
+          );
+
+      }
+
+
+      function draw(){
+
+        ctx.clearRect(
+          0,
+          0,
+          w,
+          h
+        );
+
+
+        for(
+          const p
+          of
+          pts
+        ){
+
+          p.y -= p.v;
+
+
+          if(
+            p.y
+            <
+            -4
+          ){
+
+            p.y =
+              h + 4;
+
+
+            p.x =
+              Math.random()*w;
+
+          }
+
+
+          ctx.beginPath();
+
+
+          ctx.fillStyle =
+            `rgba(
+              240,
+              212,
+              154,
+              ${p.a}
+            )`;
+
+
+          ctx.arc(
+            p.x,
+            p.y,
+            p.r,
+            0,
+            Math.PI*2
+          );
+
+
+          ctx.fill();
+
+        }
+
+
+        requestAnimationFrame(
+          draw
+        );
+
+      }
+
+
+      addEventListener(
+        'resize',
+        resize
+      );
+
+
+      resize();
+
+      draw();
+
+    }
   </script>
+
 </body>
 </html>
