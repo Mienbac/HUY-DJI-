@@ -570,8 +570,8 @@
       align-items:center;
       gap:14px;
       border:1px solid rgba(214,177,106,.34);
-      padding:16px 23px;
-      font-size:8px;
+      padding:20px 30px;
+      font-size:11px;
       letter-spacing:.24em;
       text-transform:uppercase;
       background:rgba(255,255,255,.01);
@@ -2018,29 +2018,29 @@
 
         </div>
 
-        <div class="hero-tags reveal">
+       <div class="hero-tags reveal">
 
-          <div class="hero-tag">
-            <b>Cinematic</b>
-            <small>Visual Direction</small>
-          </div>
+  <a class="hero-tag" href="#projects">
+    <b>Cinematic</b>
+    <small>Visual Direction</small>
+  </a>
 
-          <div class="hero-tag">
-            <b>Real Estate</b>
-            <small>Architecture Visual</small>
-          </div>
+  <a class="hero-tag" href="#story">
+    <b>Real Estate</b>
+    <small>Architecture Visual</small>
+  </a>
 
-          <div class="hero-tag">
-            <b>Flycam</b>
-            <small>Aerial Perspective</small>
-          </div>
+  <a class="hero-tag" href="#flycam-project">
+    <b>Flycam</b>
+    <small>Aerial Perspective</small>
+  </a>
 
-          <div class="hero-tag">
-            <b>360°</b>
-            <small>Immersive Space</small>
-          </div>
+  <a class="hero-tag" href="#view360">
+    <b>360°</b>
+    <small>Immersive Space</small>
+  </a>
 
-        </div>
+</div>
 
       </div>
 
@@ -2056,27 +2056,41 @@
       <div class="marquee-track">
 
         <div class="marquee-group">
-          <span>
-            <b>HUYDJI MEDIA</b>
-            · CINEMATIC
-            · REAL ESTATE
-            · FLYCAM
-            · EVENT
-            · 360° IMMERSIVE
-            · VISUAL DIRECTION · &nbsp;
-          </span>
+    <span>
+  <b>HUYDJI MEDIA</b>
+  · CINEMATIC
+  · REAL ESTATE
+  · FLYCAM
+  · EVENT
+  · 360° IMMERSIVE
+  · VISUAL DIRECTION
+  · <b>HUYDJI MEDIA</b>
+  · CINEMATIC
+  · REAL ESTATE
+  · FLYCAM
+  · EVENT
+  · 360° IMMERSIVE
+  · VISUAL DIRECTION · &nbsp;
+</span>
         </div>
 
         <div class="marquee-group">
-          <span>
-            <b>HUYDJI MEDIA</b>
-            · CINEMATIC
-            · REAL ESTATE
-            · FLYCAM
-            · EVENT
-            · 360° IMMERSIVE
-            · VISUAL DIRECTION · &nbsp;
-          </span>
+       <span>
+  <b>HUYDJI MEDIA</b>
+  · CINEMATIC
+  · REAL ESTATE
+  · FLYCAM
+  · EVENT
+  · 360° IMMERSIVE
+  · VISUAL DIRECTION
+  · <b>HUYDJI MEDIA</b>
+  · CINEMATIC
+  · REAL ESTATE
+  · FLYCAM
+  · EVENT
+  · 360° IMMERSIVE
+  · VISUAL DIRECTION · &nbsp;
+</span>
         </div>
 
       </div>
@@ -2255,8 +2269,8 @@
 
           </article>
 
-          <article class="project-card reveal tilt">
-
+        <article class="project-card reveal tilt" id="flycam-project">
+          
             <video
               muted
               loop
