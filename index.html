@@ -2271,9 +2271,8 @@
 
         <article class="project-card reveal tilt" id="flycam-project">
           
-            <video
+            <video id="project03Video"
               muted
-              loop
               playsinline
               preload="metadata"
               poster="./images/media-bg.jpg"
@@ -3181,6 +3180,8 @@
 
 
         if(!v)return;
+        if(v.id === 'project03Video') return;
+        
 
 
         card.addEventListener(
@@ -3222,7 +3223,28 @@
     const soundLabel =
       $('.sound-label',soundBtn);
 
+    const project03Video = $('#project03Video');
+let musicWasPlaying = false;
 
+project03Video?.addEventListener('click', () => {
+  musicWasPlaying = !music.paused;
+
+  music.pause();
+  soundState(false);
+
+  project03Video.muted = false;
+  project03Video.currentTime = 0;
+  project03Video.play().catch(()=>{});
+});
+
+project03Video?.addEventListener('ended', () => {
+  project03Video.muted = true;
+  project03Video.currentTime = 0;
+
+  if(musicWasPlaying){
+    startMusic();
+  }
+});
     music.volume = .22;
 
 
